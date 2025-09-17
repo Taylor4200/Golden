@@ -41,6 +41,7 @@ function mapIcon(iconName: string) {
 
 // Blog Posts
 export async function getBlogPosts(): Promise<BlogPost[]> {
+  if (!supabase) return []
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -68,6 +69,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  if (!supabase) return null
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -241,6 +243,7 @@ export async function updateSiteSettings(settings: Record<string, string>): Prom
 
 // Services
 export async function getServices(): Promise<Service[]> {
+  if (!supabase) return []
   const { data, error } = await supabase
     .from('services')
     .select('*')
@@ -273,6 +276,7 @@ export async function getServices(): Promise<Service[]> {
 }
 
 export async function getFeaturedServices(): Promise<Service[]> {
+  if (!supabase) return []
   const { data, error } = await supabase
     .from('services')
     .select('*')

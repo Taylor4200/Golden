@@ -17,6 +17,10 @@ export interface LeadNotification {
 }
 
 export async function sendSMSNotification(lead: LeadNotification) {
+  if (!supabase) {
+    console.warn('Supabase not available, skipping SMS notification')
+    return
+  }
   try {
     // Call Supabase Edge Function for SMS
     const { data, error } = await supabase.functions.invoke('send-sms-notification', {
@@ -39,6 +43,10 @@ export async function sendSMSNotification(lead: LeadNotification) {
 }
 
 export async function sendEmailNotification(lead: LeadNotification) {
+  if (!supabase) {
+    console.warn('Supabase not available, skipping email notification')
+    return
+  }
   try {
     // Call Supabase Edge Function for Email
     const { data, error } = await supabase.functions.invoke('send-email-notification', {
