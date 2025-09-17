@@ -24,7 +24,12 @@ async function getAIFallbackResponse(userMessage: string, conversationHistory?: 
 
 Your identity: You are Golden Heavy Duty's AI assistant, created specifically for this truck repair business. You know about truck repair, our services, and can help customers get the assistance they need.
 
-Always be friendly and professional. Keep responses concise and helpful. When asked about yourself, say you are the AI assistant for Golden Heavy Duty Truck Repair.
+Business Information:
+- Phone: (303) 304-9993
+- Address: 806 Cedar St, Hudson, CO 80642
+- Hours: Monday-Friday 9AM-9PM, Saturday-Sunday 9AM-5PM, 24/7 Emergency Service
+
+Always be friendly and professional. Keep responses concise and helpful. When asked about yourself, say you are the AI assistant for Golden Heavy Duty Truck Repair. When asked for phone number, contact info, or how to reach us, provide our phone number (303) 304-9993.
 
 IMPORTANT: Only suggest forms, appointments, or quotes when the user actually needs service or asks for them. For general questions, just answer conversationally. Don't push forms on users who are just asking questions or making small talk.`,
         max_tokens: 200,
@@ -127,6 +132,11 @@ export async function POST(request: NextRequest) {
         "Regular hours are Monday-Friday 9AM-9PM, weekends 9AM-5PM. Emergency service is available 24/7.",
         "Our shop hours are Monday-Friday 9AM-9PM, Saturday-Sunday 9AM-5PM. Emergency assistance is always available."
       ],
+      phone: [
+        "You can reach us at (303) 304-9993. We're available 24/7 for emergency roadside assistance!",
+        "Our phone number is (303) 304-9993. Call us anytime for emergency service or to schedule an appointment.",
+        "Give us a call at (303) 304-9993. We provide 24/7 emergency service and regular business hours support."
+      ],
       fleet: [
         "Great! We specialize in fleet services. Let me get some details about your fleet and service needs.",
         "Our fleet services are comprehensive and cost-effective. I'll connect you with our fleet specialist.",
@@ -159,6 +169,7 @@ export async function POST(request: NextRequest) {
       appointment: ['appointment', 'schedule', 'book', 'reserve', 'time slot', 'availability'],
       location: ['where', 'location', 'address', 'directions', 'find', 'located'],
       hours: ['hours', 'open', 'closed', 'business hours', 'operating hours', 'when open'],
+      phone: ['phone', 'number', 'call', 'contact', 'telephone', 'reach', 'get in touch'],
       fleet: ['fleet', 'multiple', 'company', 'business', 'commercial', 'fleet management']
     };
 
@@ -175,7 +186,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Hybrid system: Use pre-written responses for critical intents, AI for others
-    const criticalIntents = ['emergency', 'location', 'hours', 'quote', 'appointment'];
+    const criticalIntents = ['emergency', 'location', 'hours', 'phone', 'quote', 'appointment'];
     let finalResponse: string;
     let shouldShowForm: boolean;
 
