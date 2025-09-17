@@ -3,13 +3,12 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Phone, Menu, X, Clock, MapPin, ChevronDown } from 'lucide-react';
+import { Phone, Menu, X, Clock, MapPin } from 'lucide-react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const { settings, isLoading } = useSiteSettings();
 
   useEffect(() => {
@@ -26,15 +25,6 @@ export default function Header() {
     { name: 'Contact', href: '/contact' },
   ];
 
-  const servicesDropdown = [
-    { name: 'Engine Repair', href: '/services#engine' },
-    { name: 'Transmission Service', href: '/services#transmission' },
-    { name: 'Brake Systems', href: '/services#brakes' },
-    { name: 'Diagnostics', href: '/services#diagnostics' },
-    { name: 'Emergency Service', href: '/services#emergency' },
-    { name: 'Fleet Maintenance', href: '/services#fleet' },
-    { name: 'View All Services', href: '/services' },
-  ];
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -82,37 +72,13 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              {/* Services Dropdown */}
-              <div className="relative">
-                <button
-                  onMouseEnter={() => setIsServicesOpen(true)}
-                  onMouseLeave={() => setIsServicesOpen(false)}
-                  className="flex items-center space-x-2 text-secondary hover:text-primary transition-colors font-semibold text-lg px-6 py-3"
-                >
-                  <span>Services</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                
-                {isServicesOpen && (
-                  <div
-                    onMouseEnter={() => setIsServicesOpen(true)}
-                    onMouseLeave={() => setIsServicesOpen(false)}
-                    className="absolute top-full left-0 mt-2 w-64 bg-white border border-border rounded-lg shadow-lg z-50"
-                  >
-                    <div className="py-2">
-                      {servicesDropdown.map((service) => (
-                        <Link
-                          key={service.name}
-                          href={service.href}
-                          className="block px-4 py-3 text-secondary hover:bg-gray-50 hover:text-primary transition-colors"
-                        >
-                          {service.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              {/* Services Link */}
+              <Link
+                href="/services"
+                className="text-secondary hover:text-primary transition-colors font-semibold text-lg px-6 py-3"
+              >
+                Services
+              </Link>
 
               {/* Other Navigation Links */}
               {navigation.map((item) => (

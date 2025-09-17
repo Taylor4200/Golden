@@ -22,6 +22,7 @@ export default function Footer() {
     { name: 'Home', href: '/' },
     { name: 'Services', href: '/services' },
     { name: 'About Us', href: '/about' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Contact', href: '/contact' },
     { name: 'Service Areas', href: '/service-areas' },
   ];
@@ -32,7 +33,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center">
+            <Link href="/" className="flex items-center">
               <Image
                 src="/Logo.png"
                 alt="Golden Heavy Duty Repair"
@@ -40,7 +41,7 @@ export default function Footer() {
                 height={80}
                 className="h-12 w-auto"
               />
-            </div>
+            </Link>
             <p className="text-gray-300 text-sm leading-relaxed">
               {settings.siteDescription}
             </p>

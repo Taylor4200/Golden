@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Calendar, Clock, User, ArrowRight, Search, Filter } from 'lucide-react';
+import { Calendar, Clock, User, ArrowRight, Search, Filter, Phone, Wrench, Shield, ChevronLeft } from 'lucide-react';
 import { blogCategories } from '@/data/blog';
 import { BlogPost, BlogCategory } from '@/types/blog';
 import { getBlogPosts } from '@/lib/database';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -83,23 +85,70 @@ export default function BlogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16 py-16">
-          <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold text-secondary mb-6">
-              Golden Heavy Duty Blog
-            </h1>
-            <p className="text-2xl text-gray-600 max-w-4xl mx-auto">
-              Expert insights, maintenance tips, and industry knowledge to keep your semi truck running smoothly
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Header />
+      
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white border-b border-gray-200 pt-28">
+        <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16 py-4">
+          <nav className="flex items-center space-x-2 text-sm">
+            <Link href="/" className="text-gray-500 hover:text-primary transition-colors">
+              Home
+            </Link>
+            <span className="text-gray-400">/</span>
+            <span className="text-secondary font-medium">Blog</span>
+          </nav>
+        </div>
+      </div>
+
+
+      {/* High-Converting CTA Section */}
+      <div className="bg-gradient-to-r from-primary to-primary-dark py-16">
+        <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
+          <div className="text-center text-white">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Truck down? Get back on the road fast.
+            </h2>
+            <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto">
+              Our certified mechanics provide reliable heavy-duty repair in Hudson, CO — plus mobile service within 100 miles of Denver.
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                href="tel:+13033049993"
+                className="bg-white text-primary hover:bg-gray-100 font-bold text-lg px-8 py-4 rounded-lg transition-colors flex items-center space-x-3"
+              >
+                <Phone className="h-5 w-5" />
+                <span>Call (303) 304-9993</span>
+              </a>
+              <Link
+                href="/services"
+                className="border-2 border-white text-white hover:bg-white hover:text-primary font-bold text-lg px-8 py-4 rounded-lg transition-colors flex items-center space-x-3"
+              >
+                <Wrench className="h-5 w-5" />
+                <span>View Our Services</span>
+              </Link>
+            </div>
+            <div className="mt-8 flex flex-wrap justify-center items-center gap-8 text-white/80">
+              <div className="flex items-center space-x-2">
+                <Shield className="h-5 w-5" />
+                <span>24/7 Emergency Service</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Wrench className="h-5 w-5" />
+                <span>Certified Mechanics</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Shield className="h-5 w-5" />
+                <span>Quality Warranty</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+      <div className="flex-1">
+        <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16 py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* Search */}
@@ -272,7 +321,10 @@ export default function BlogPage() {
             )}
           </div>
         </div>
+        </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }

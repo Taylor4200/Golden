@@ -36,13 +36,13 @@ export default function About() {
   const founders = [
     {
       name: 'Brandon',
-      role: 'Co-Founder & Lead Mechanic',
+      role: 'Co-Founder',
       experience: '5+ years',
       specialties: ['Engine Rebuilds', 'Transmission Service', 'Fleet Management'],
     },
     {
       name: 'Tyler',
-      role: 'Co-Founder & Service Manager',
+      role: 'Co-Founder',
       experience: '5+ years',
       specialties: ['Customer Relations', 'Service Coordination', 'Quality Control'],
     },
