@@ -35,8 +35,11 @@ const iconMap: Record<string, React.ComponentType> = {
   'phone': Phone
 }
 
-function mapIcon(iconName: string) {
-  return iconMap[iconName?.toLowerCase()] || Wrench
+function mapIcon(iconName: any) {
+  if (!iconName || typeof iconName !== 'string') {
+    return Wrench;
+  }
+  return iconMap[iconName.toLowerCase()] || Wrench;
 }
 
 // Blog Posts
@@ -241,9 +244,325 @@ export async function updateSiteSettings(settings: Record<string, string>): Prom
   return true
 }
 
+// Fallback services data
+const fallbackServices: Service[] = [
+  {
+    id: 'dot-inspections',
+    name: 'DOT Inspections',
+    slug: 'dot-inspections',
+    description: 'Comprehensive DOT inspections to ensure your truck meets all federal safety regulations. We perform thorough checks on brakes, lights, tires, and all safety systems.',
+    shortDescription: 'Complete DOT inspections to keep your truck compliant with federal regulations.',
+    icon: 'shield',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Complete brake system inspection',
+      'Light and electrical system check',
+      'Tire and wheel inspection',
+      'Steering and suspension check',
+      'Exhaust system inspection',
+      'Documentation and certification'
+    ],
+    category: 'inspection',
+    featured: true,
+    active: true,
+    sortOrder: 1,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'pm-services',
+    name: 'PM Services',
+    slug: 'pm-services',
+    description: 'Preventive maintenance services to keep your truck running smoothly and avoid costly breakdowns. Regular PM services extend vehicle life and improve reliability.',
+    shortDescription: 'Preventive maintenance to keep your truck running smoothly and avoid breakdowns.',
+    icon: 'settings',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Oil and filter changes',
+      'Fluid level checks',
+      'Belt and hose inspection',
+      'Battery testing',
+      'Air filter replacement',
+      'Lubrication of moving parts'
+    ],
+    category: 'maintenance',
+    featured: true,
+    active: true,
+    sortOrder: 2,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'turbo-charger',
+    name: 'Turbo Charger',
+    slug: 'turbo-charger',
+    description: 'Turbocharger repair and replacement services. We diagnose turbo issues, rebuild units, and install new turbos to restore engine power and efficiency.',
+    shortDescription: 'Turbocharger repair, rebuild, and replacement services.',
+    icon: 'zap',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Turbo diagnosis and testing',
+      'Turbo rebuild services',
+      'New turbo installation',
+      'Boost pressure testing',
+      'Oil line inspection',
+      'Warranty on all work'
+    ],
+    category: 'engine',
+    featured: true,
+    active: true,
+    sortOrder: 3,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'tires',
+    name: 'Tires',
+    slug: 'tires',
+    description: 'Complete tire services including mounting, balancing, alignment, and repair. We carry all major tire brands and sizes for heavy-duty trucks.',
+    shortDescription: 'Tire mounting, balancing, alignment, and repair services.',
+    icon: 'circle',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Tire mounting and balancing',
+      'Wheel alignment',
+      'Tire repair and patching',
+      'Tire rotation',
+      'Pressure monitoring',
+      'Road hazard protection'
+    ],
+    category: 'tires',
+    featured: false,
+    active: true,
+    sortOrder: 4,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'brakes',
+    name: 'Brakes',
+    slug: 'brakes',
+    description: 'Complete brake system services including pad replacement, rotor resurfacing, brake line repair, and ABS system diagnostics.',
+    shortDescription: 'Complete brake system repair and maintenance services.',
+    icon: 'alert-triangle',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Brake pad replacement',
+      'Rotor resurfacing',
+      'Brake line repair',
+      'ABS system diagnostics',
+      'Brake fluid service',
+      'Emergency brake repair'
+    ],
+    category: 'brakes',
+    featured: true,
+    active: true,
+    sortOrder: 5,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'cooling-system',
+    name: 'Cooling System Repairs',
+    slug: 'cooling-system',
+    description: 'Cooling system repair and maintenance including radiator service, water pump replacement, thermostat repair, and coolant system flush.',
+    shortDescription: 'Cooling system repair and maintenance services.',
+    icon: 'settings',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Radiator repair and replacement',
+      'Water pump service',
+      'Thermostat replacement',
+      'Coolant system flush',
+      'Hose inspection and replacement',
+      'Fan clutch repair'
+    ],
+    category: 'engine',
+    featured: false,
+    active: true,
+    sortOrder: 6,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'after-treatment',
+    name: 'After Treatment Repairs',
+    slug: 'after-treatment',
+    description: 'After-treatment system repair including DPF cleaning, SCR system service, DEF system repair, and emissions compliance maintenance.',
+    shortDescription: 'After-treatment system repair and emissions compliance services.',
+    icon: 'shield',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'DPF cleaning and repair',
+      'SCR system service',
+      'DEF system repair',
+      'Emissions testing',
+      'Sensor replacement',
+      'System diagnostics'
+    ],
+    category: 'emissions',
+    featured: false,
+    active: true,
+    sortOrder: 7,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'regen',
+    name: 'Regen',
+    slug: 'regen',
+    description: 'Diesel particulate filter regeneration services including forced regen, manual regen, and regen system diagnostics.',
+    shortDescription: 'Diesel particulate filter regeneration services.',
+    icon: 'zap',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Forced regeneration',
+      'Manual regeneration',
+      'Regen system diagnostics',
+      'DPF pressure testing',
+      'Temperature sensor check',
+      'System cleaning'
+    ],
+    category: 'emissions',
+    featured: false,
+    active: true,
+    sortOrder: 8,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'suspension',
+    name: 'Suspension / Air Bags / Shocks',
+    slug: 'suspension',
+    description: 'Complete suspension system repair including air bag replacement, shock absorber service, spring repair, and suspension alignment.',
+    shortDescription: 'Suspension system repair including air bags and shocks.',
+    icon: 'settings',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Air bag replacement',
+      'Shock absorber service',
+      'Spring repair',
+      'Suspension alignment',
+      'Bushings replacement',
+      'Load leveling system'
+    ],
+    category: 'suspension',
+    featured: false,
+    active: true,
+    sortOrder: 9,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'wheel-seals',
+    name: 'Wheel Seals',
+    slug: 'wheel-seals',
+    description: 'Wheel seal replacement and hub service to prevent oil leaks and maintain proper wheel bearing lubrication.',
+    shortDescription: 'Wheel seal replacement and hub service.',
+    icon: 'circle',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Wheel seal replacement',
+      'Hub service',
+      'Bearing inspection',
+      'Oil leak repair',
+      'Seal installation',
+      'Lubrication service'
+    ],
+    category: 'wheels',
+    featured: false,
+    active: true,
+    sortOrder: 10,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'electrical',
+    name: 'Electrical',
+    slug: 'electrical',
+    description: 'Complete electrical system repair including wiring, alternator service, starter repair, and lighting system maintenance.',
+    shortDescription: 'Complete electrical system repair and maintenance.',
+    icon: 'zap',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Wiring repair',
+      'Alternator service',
+      'Starter repair',
+      'Lighting system',
+      'Battery service',
+      'Fuse and relay repair'
+    ],
+    category: 'electrical',
+    featured: false,
+    active: true,
+    sortOrder: 11,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'cooling-heating',
+    name: 'Cooling / Heating',
+    slug: 'cooling-heating',
+    description: 'HVAC system repair including air conditioning service, heater repair, and climate control system maintenance.',
+    shortDescription: 'HVAC system repair and climate control maintenance.',
+    icon: 'settings',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Air conditioning service',
+      'Heater repair',
+      'Climate control',
+      'Blower motor service',
+      'Refrigerant service',
+      'System diagnostics'
+    ],
+    category: 'hvac',
+    featured: false,
+    active: true,
+    sortOrder: 12,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'trailer-repair',
+    name: 'Trailer Repair',
+    slug: 'trailer-repair',
+    description: 'Complete trailer repair services including brake service, lighting repair, suspension work, and structural maintenance.',
+    shortDescription: 'Complete trailer repair and maintenance services.',
+    icon: 'truck',
+    priceRange: 'Quote by call',
+    duration: 'Quote by call',
+    features: [
+      'Trailer brake service',
+      'Lighting system repair',
+      'Suspension work',
+      'Structural repair',
+      'Coupling service',
+      'Safety inspection'
+    ],
+    category: 'trailer',
+    featured: false,
+    active: true,
+    sortOrder: 13,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+];
+
 // Services
 export async function getServices(): Promise<Service[]> {
-  if (!supabase) return []
+  if (!supabase) return fallbackServices
   const { data, error } = await supabase
     .from('services')
     .select('*')
@@ -252,7 +571,11 @@ export async function getServices(): Promise<Service[]> {
 
   if (error) {
     console.error('Error fetching services:', error)
-    return []
+    return fallbackServices
+  }
+
+  if (!data || data.length === 0) {
+    return fallbackServices
   }
 
   return data.map(service => ({
@@ -261,7 +584,7 @@ export async function getServices(): Promise<Service[]> {
     slug: service.slug,
     description: service.description,
     shortDescription: service.short_description,
-    icon: mapIcon(service.icon),
+    icon: service.icon, // Keep as string, don't convert to component
     priceRange: service.price_range,
     duration: service.duration,
     features: service.features,
@@ -276,7 +599,7 @@ export async function getServices(): Promise<Service[]> {
 }
 
 export async function getFeaturedServices(): Promise<Service[]> {
-  if (!supabase) return []
+  if (!supabase) return fallbackServices.filter(s => s.featured)
   const { data, error } = await supabase
     .from('services')
     .select('*')
@@ -286,7 +609,11 @@ export async function getFeaturedServices(): Promise<Service[]> {
 
   if (error) {
     console.error('Error fetching featured services:', error)
-    return []
+    return fallbackServices.filter(s => s.featured)
+  }
+
+  if (!data || data.length === 0) {
+    return fallbackServices.filter(s => s.featured)
   }
 
   return data.map(service => ({
@@ -295,7 +622,7 @@ export async function getFeaturedServices(): Promise<Service[]> {
     slug: service.slug,
     description: service.description,
     shortDescription: service.short_description,
-    icon: mapIcon(service.icon),
+    icon: service.icon, // Keep as string, don't convert to component
     priceRange: service.price_range,
     duration: service.duration,
     features: service.features,
@@ -350,7 +677,7 @@ export async function createService(service: Omit<Service, 'id' | 'createdAt' | 
       slug: service.slug,
       description: service.description,
       short_description: service.shortDescription,
-      icon: mapIcon(service.icon),
+      icon: service.icon, // Keep as string, don't convert to component
       price_range: service.priceRange,
       duration: service.duration,
       features: service.features,
@@ -391,12 +718,13 @@ export async function createService(service: Omit<Service, 'id' | 'createdAt' | 
 export async function updateService(id: string, service: Partial<Service>): Promise<Service | null> {
   const { data, error } = await supabase
     .from('services')
-    .update({
+    .upsert({
+      id: id,
       name: service.name,
       slug: service.slug,
       description: service.description,
       short_description: service.shortDescription,
-      icon: mapIcon(service.icon),
+      icon: service.icon, // Keep as string, don't convert to component
       price_range: service.priceRange,
       duration: service.duration,
       features: service.features,
@@ -404,9 +732,9 @@ export async function updateService(id: string, service: Partial<Service>): Prom
       category: service.category,
       featured: service.featured,
       active: service.active,
-      sort_order: service.sortOrder
+      sort_order: service.sortOrder,
+      updated_at: new Date().toISOString()
     })
-    .eq('id', id)
     .select()
     .single()
 
@@ -512,12 +840,12 @@ export async function createServiceCategory(category: Omit<ServiceCategory, 'id'
 export async function authenticateAdmin(username: string, password: string): Promise<boolean> {
   // For demo purposes, we'll use a simple check
   // In production, you'd use Supabase Auth or proper password hashing
-  if (username === 'admin' && password === 'golden2024') {
+  if (username === 'Goldenrepair' && password === 'Goldenrepair1!') {
     // Update last login
     await supabase
       .from('admin_users')
       .upsert({
-        username: 'admin',
+        username: 'Goldenrepair',
         email: 'admin@goldenheavyduty.com',
         last_login: new Date().toISOString()
       }, { onConflict: 'username' })

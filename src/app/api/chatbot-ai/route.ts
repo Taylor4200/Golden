@@ -209,11 +209,18 @@ export async function POST(request: NextRequest) {
           greeting: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings', 'whats up', 'how are you', 'how are you doing', 'how is it going', 'how goes it'],
           help: ['help', 'need help', 'assistance', 'problem', 'issue', 'broken', 'fix', 'repair', 'trouble', 'malfunction'],
           emergency: ['emergency', 'urgent', 'stuck', 'broken down', 'stranded', 'asap', 'immediately', 'help me', 'need help now', 'critical', 'desperate'],
-          engine: ['engine', 'motor', 'wont start', 'won\'t start', 'wont turn over', 'won\'t turn over', 'cranks', 'stalls', 'overheating', 'smoke', 'knocking', 'rough idle', 'engine wont start', 'engine won\'t start'],
+          engine: ['engine', 'motor', 'wont start', 'won\'t start', 'wont turn over', 'won\'t turn over', 'cranks', 'stalls', 'overheating', 'smoke', 'knocking', 'rough idle', 'engine wont start', 'engine won\'t start', 'turbo', 'turbocharger', 'cooling system', 'radiator', 'water pump'],
           transmission: ['transmission', 'gearbox', 'shifting', 'clutch', 'automatic', 'manual', 'gear', 'stuck in gear', 'wont shift', 'won\'t shift', 'transmission stuck'],
           brake: ['brake', 'brakes', 'stopping', 'pedal', 'squeaking', 'grinding', 'soft pedal', 'pulling', 'brake pedal', 'brakes squeaking'],
           tire: ['tire', 'tyre', 'flat', 'blowout', 'tread', 'alignment', 'balancing', 'pressure', 'flat tire', 'tire pressure'],
           electrical: ['electrical', 'wiring', 'battery', 'alternator', 'starter', 'lights', 'fuse', 'short circuit', 'electrical problem', 'battery dead'],
+          inspection: ['dot inspection', 'dot inspections', 'inspection', 'inspections', 'safety inspection', 'compliance'],
+          maintenance: ['pm service', 'pm services', 'preventive maintenance', 'maintenance', 'preventive'],
+          emissions: ['after treatment', 'dpf', 'regen', 'regeneration', 'scr', 'def', 'emissions'],
+          suspension: ['suspension', 'air bags', 'air bag', 'shocks', 'shock absorbers', 'springs'],
+          wheels: ['wheel seals', 'wheel seal', 'hub service', 'bearing'],
+          hvac: ['cooling', 'heating', 'air conditioning', 'ac', 'climate control'],
+          trailer: ['trailer', 'trailer repair', 'trailer service'],
           quote: ['price', 'cost', 'quote', 'estimate', 'how much', 'pricing', 'rates', 'what does it cost', 'how much does it cost'],
           appointment: ['appointment', 'schedule', 'book', 'reserve', 'time slot', 'availability', 'schedule appointment', 'book appointment'],
           location: ['where', 'location', 'address', 'directions', 'find', 'located', 'where are you', 'where is your shop'],
@@ -254,7 +261,7 @@ export async function POST(request: NextRequest) {
       finalResponse = aiResponse;
       
       // Smart form detection - only show form if user actually needs service
-      const serviceKeywords = ['appointment', 'quote', 'schedule', 'book', 'service', 'repair', 'fix', 'help me', 'need help', 'broken', 'issue', 'problem', 'engine', 'transmission', 'brake', 'tire', 'electrical'];
+      const serviceKeywords = ['appointment', 'quote', 'schedule', 'book', 'service', 'repair', 'fix', 'help me', 'need help', 'broken', 'issue', 'problem', 'engine', 'transmission', 'brake', 'tire', 'electrical', 'dot inspection', 'pm service', 'turbo', 'cooling', 'after treatment', 'regen', 'suspension', 'wheel seals', 'hvac', 'trailer'];
       const hasServiceKeywords = serviceKeywords.some(keyword => {
         // Handle multi-word phrases with flexible whitespace
         const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

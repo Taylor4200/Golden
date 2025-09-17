@@ -19,106 +19,198 @@ import {
 export default function Services() {
   const services = [
     {
-      icon: Wrench,
-      title: 'Engine Repair & Rebuilds',
-      description: 'Complete engine diagnostics, rebuilds, and maintenance for all heavy-duty truck engines including Cummins, Detroit, and Caterpillar.',
-      features: [
-        'Engine Diagnostics & Testing',
-        'Complete Engine Rebuilds',
-        'Cylinder Head Service',
-        'Turbocharger Repair',
-        'Fuel System Service',
-        'Cooling System Repair',
-        'Preventive Maintenance Programs'
-      ],
-      pricing: 'Call for quote'
-    },
-    {
-      icon: Cog,
-      title: 'Transmission Service',
-      description: 'Expert transmission repair, rebuilds, and maintenance to keep your truck shifting smoothly and efficiently.',
-      features: [
-        'Transmission Diagnostics',
-        'Complete Transmission Rebuilds',
-        'Clutch Service & Replacement',
-        'Torque Converter Repair',
-        'Fluid Changes & Flushes',
-        'Shift Solenoid Service',
-        'Manual & Automatic Transmissions'
-      ],
-      pricing: 'Call for quote'
-    },
-    {
       icon: Shield,
-      title: 'Brake Systems',
-      description: 'Comprehensive brake system service, repair, and maintenance for maximum safety and performance.',
+      title: 'DOT Inspections',
+      description: 'Comprehensive DOT inspections to ensure your truck meets all federal safety regulations. We perform thorough checks on brakes, lights, tires, and all safety systems.',
       features: [
-        'Air Brake System Service',
-        'Hydraulic Brake Repair',
-        'Brake Pad & Shoe Replacement',
-        'Rotor & Drum Service',
-        'ABS System Diagnostics',
-        'Brake Line Repair',
-        'Emergency Brake Service'
+        'Complete brake system inspection',
+        'Light and electrical system check',
+        'Tire and wheel inspection',
+        'Steering and suspension check',
+        'Exhaust system inspection',
+        'Documentation and certification'
       ],
-      pricing: 'Call for quote'
+      pricing: 'Quote by call'
     },
     {
       icon: Settings,
-      title: 'Diagnostics & Electrical',
-      description: 'State-of-the-art diagnostic equipment to quickly identify and resolve electrical and computer issues.',
+      title: 'PM Services',
+      description: 'Preventive maintenance services to keep your truck running smoothly and avoid costly breakdowns. Regular PM services extend vehicle life and improve reliability.',
       features: [
-        'Computer Diagnostics',
-        'Engine Scanning',
-        'Electrical System Testing',
-        'Wiring Harness Repair',
-        'Sensor Replacement',
-        'ECM/PCM Programming',
-        'Performance Analysis'
+        'Oil and filter changes',
+        'Fluid level checks',
+        'Belt and hose inspection',
+        'Battery testing',
+        'Air filter replacement',
+        'Lubrication of moving parts'
       ],
-      pricing: 'Call for quote'
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Wrench,
+      title: 'Turbo Charger',
+      description: 'Turbocharger repair and replacement services. We diagnose turbo issues, rebuild units, and install new turbos to restore engine power and efficiency.',
+      features: [
+        'Turbo diagnosis and testing',
+        'Turbo rebuild services',
+        'New turbo installation',
+        'Boost pressure testing',
+        'Oil line inspection',
+        'Warranty on all work'
+      ],
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Cog,
+      title: 'Tires',
+      description: 'Complete tire services including mounting, balancing, alignment, and repair. We carry all major tire brands and sizes for heavy-duty trucks.',
+      features: [
+        'Tire mounting and balancing',
+        'Wheel alignment',
+        'Tire repair and patching',
+        'Tire rotation',
+        'Pressure monitoring',
+        'Road hazard protection'
+      ],
+      pricing: 'Quote by call'
     },
     {
       icon: AlertTriangle,
-      title: 'Emergency Service',
-      description: '24/7 emergency roadside assistance and towing for when you need help most.',
+      title: 'Brakes',
+      description: 'Complete brake system services including pad replacement, rotor resurfacing, brake line repair, and ABS system diagnostics.',
       features: [
-        '24/7 Roadside Assistance',
-        'Emergency Towing Service',
-        'On-Site Repairs',
-        'Jump Start Service',
-        'Tire Changes',
-        'Fuel Delivery',
-        'Lockout Service'
+        'Brake pad replacement',
+        'Rotor resurfacing',
+        'Brake line repair',
+        'ABS system diagnostics',
+        'Brake fluid service',
+        'Emergency brake repair'
       ],
-      pricing: 'Call for emergency rates'
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Settings,
+      title: 'Cooling System Repairs',
+      description: 'Cooling system repair and maintenance including radiator service, water pump replacement, thermostat repair, and coolant system flush.',
+      features: [
+        'Radiator repair and replacement',
+        'Water pump service',
+        'Thermostat replacement',
+        'Coolant system flush',
+        'Hose inspection and replacement',
+        'Fan clutch repair'
+      ],
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Shield,
+      title: 'After Treatment Repairs',
+      description: 'After-treatment system repair including DPF cleaning, SCR system service, DEF system repair, and emissions compliance maintenance.',
+      features: [
+        'DPF cleaning and repair',
+        'SCR system service',
+        'DEF system repair',
+        'Emissions testing',
+        'Sensor replacement',
+        'System diagnostics'
+      ],
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Wrench,
+      title: 'Regen',
+      description: 'Diesel particulate filter regeneration services including forced regen, manual regen, and regen system diagnostics.',
+      features: [
+        'Forced regeneration',
+        'Manual regeneration',
+        'Regen system diagnostics',
+        'DPF pressure testing',
+        'Temperature sensor check',
+        'System cleaning'
+      ],
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Settings,
+      title: 'Suspension / Air Bags / Shocks',
+      description: 'Complete suspension system repair including air bag replacement, shock absorber service, spring repair, and suspension alignment.',
+      features: [
+        'Air bag replacement',
+        'Shock absorber service',
+        'Spring repair',
+        'Suspension alignment',
+        'Bushings replacement',
+        'Load leveling system'
+      ],
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Cog,
+      title: 'Wheel Seals',
+      description: 'Wheel seal replacement and hub service to prevent oil leaks and maintain proper wheel bearing lubrication.',
+      features: [
+        'Wheel seal replacement',
+        'Hub service',
+        'Bearing inspection',
+        'Oil leak repair',
+        'Seal installation',
+        'Lubrication service'
+      ],
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Wrench,
+      title: 'Electrical',
+      description: 'Complete electrical system repair including wiring, alternator service, starter repair, and lighting system maintenance.',
+      features: [
+        'Wiring repair',
+        'Alternator service',
+        'Starter repair',
+        'Lighting system',
+        'Battery service',
+        'Fuse and relay repair'
+      ],
+      pricing: 'Quote by call'
+    },
+    {
+      icon: Settings,
+      title: 'Cooling / Heating',
+      description: 'HVAC system repair including air conditioning service, heater repair, and climate control system maintenance.',
+      features: [
+        'Air conditioning service',
+        'Heater repair',
+        'Climate control',
+        'Blower motor service',
+        'Refrigerant service',
+        'System diagnostics'
+      ],
+      pricing: 'Quote by call'
     },
     {
       icon: Users,
-      title: 'Fleet Maintenance',
-      description: 'Comprehensive fleet maintenance programs to keep your entire operation running smoothly.',
+      title: 'Trailer Repair',
+      description: 'Complete trailer repair services including brake service, lighting repair, suspension work, and structural maintenance.',
       features: [
-        'Scheduled Maintenance Programs',
-        'Fleet Inspections',
-        'Cost Management & Reporting',
-        'Preventive Maintenance',
-        'Parts Inventory Management',
-        'Service History Tracking',
-        'Custom Maintenance Plans'
+        'Trailer brake service',
+        'Lighting system repair',
+        'Suspension work',
+        'Structural repair',
+        'Coupling service',
+        'Safety inspection'
       ],
-      pricing: 'Volume discounts available'
+      pricing: 'Quote by call'
     }
   ];
 
   const additionalServices = [
-    'Suspension & Steering Repair',
-    'Exhaust System Service',
-    'Air Conditioning Repair',
-    'Hydraulic System Service',
-    'PTO (Power Take-Off) Service',
-    'Driveline & Differential Service',
-    'Body & Frame Repair',
-    'Paint & Refinishing'
+    'Mobile Service Available',
+    'Same Services On-Site',
+    'Emergency Roadside Assistance',
+    '24/7 Emergency Service',
+    'Fleet Service Programs',
+    'Preventive Maintenance',
+    'Parts & Components',
+    'Warranty Service'
   ];
 
   const process = [

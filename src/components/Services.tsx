@@ -18,49 +18,98 @@ import { useFeaturedServices } from '@/hooks/useServices';
 export default function Services() {
   const { featuredServices, isLoading } = useFeaturedServices();
 
-  // Fallback services if loading or no data
+  // Fallback services if loading or no data - Your actual services
   const fallbackServices = [
     {
-      icon: Wrench,
-      title: 'Engine Repair',
-      description: 'Complete engine diagnostics, rebuilds, and maintenance for all heavy-duty truck engines.',
-      features: ['Engine Diagnostics', 'Rebuilds & Overhauls', 'Preventive Maintenance', 'Performance Tuning'],
-      priceRange: 'Call for quote'
-    },
-    {
-      icon: Cog,
-      title: 'Transmission Service',
-      description: 'Expert transmission repair, rebuilds, and maintenance to keep your truck shifting smoothly.',
-      features: ['Transmission Rebuilds', 'Clutch Service', 'Fluid Changes', 'Diagnostic Testing'],
-      priceRange: 'Call for quote'
-    },
-    {
       icon: Shield,
-      title: 'Brake Systems',
-      description: 'Comprehensive brake system service, repair, and maintenance for maximum safety.',
-      features: ['Brake Pad Replacement', 'Rotor Service', 'Air Brake Systems', 'ABS Diagnostics'],
-      priceRange: 'Call for quote'
+      title: 'DOT Inspections',
+      description: 'Complete DOT inspections to keep your truck compliant with federal regulations.',
+      features: ['Complete brake system inspection', 'Light and electrical system check', 'Tire and wheel inspection', 'Steering and suspension check'],
+      priceRange: 'Quote by call'
     },
     {
       icon: Settings,
-      title: 'Diagnostics',
-      description: 'State-of-the-art diagnostic equipment to quickly identify and resolve issues.',
-      features: ['Computer Diagnostics', 'Engine Scanning', 'Electrical Testing', 'Performance Analysis'],
-      priceRange: 'Call for quote'
+      title: 'PM Services',
+      description: 'Preventive maintenance to keep your truck running smoothly and avoid breakdowns.',
+      features: ['Oil and filter changes', 'Fluid level checks', 'Belt and hose inspection', 'Battery testing'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Wrench,
+      title: 'Turbo Charger',
+      description: 'Turbocharger repair, rebuild, and replacement services.',
+      features: ['Turbo diagnosis and testing', 'Turbo rebuild services', 'New turbo installation', 'Boost pressure testing'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Cog,
+      title: 'Tires',
+      description: 'Tire mounting, balancing, alignment, and repair services.',
+      features: ['Tire mounting and balancing', 'Wheel alignment', 'Tire repair and patching', 'Tire rotation'],
+      priceRange: 'Quote by call'
     },
     {
       icon: AlertTriangle,
-      title: 'Emergency Service',
-      description: '24/7 emergency roadside assistance and towing for when you need help most.',
-      features: ['Roadside Assistance', 'Emergency Towing', '24/7 Availability', 'Rapid Response'],
-      priceRange: 'Call for quote'
+      title: 'Brakes',
+      description: 'Complete brake system repair and maintenance services.',
+      features: ['Brake pad replacement', 'Rotor resurfacing', 'Brake line repair', 'ABS system diagnostics'],
+      priceRange: 'Quote by call'
     },
     {
-      icon: Users,
-      title: 'Fleet Maintenance',
-      description: 'Comprehensive fleet maintenance programs to keep your entire operation running.',
-      features: ['Scheduled Maintenance', 'Fleet Inspections', 'Cost Management', 'Reporting'],
-      priceRange: 'Call for quote'
+      icon: Settings,
+      title: 'Cooling System Repairs',
+      description: 'Cooling system repair and maintenance services.',
+      features: ['Radiator repair and replacement', 'Water pump service', 'Thermostat replacement', 'Coolant system flush'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Shield,
+      title: 'After Treatment Repairs',
+      description: 'After-treatment system repair and emissions compliance services.',
+      features: ['DPF cleaning and repair', 'SCR system service', 'DEF system repair', 'Emissions testing'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Wrench,
+      title: 'Regen',
+      description: 'Diesel particulate filter regeneration services.',
+      features: ['Forced regeneration', 'Manual regeneration', 'Regen system diagnostics', 'DPF pressure testing'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Settings,
+      title: 'Suspension / Air Bags / Shocks',
+      description: 'Suspension system repair including air bags and shocks.',
+      features: ['Air bag replacement', 'Shock absorber service', 'Spring repair', 'Suspension alignment'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Cog,
+      title: 'Wheel Seals',
+      description: 'Wheel seal replacement and hub service.',
+      features: ['Wheel seal replacement', 'Hub service', 'Bearing inspection', 'Oil leak repair'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Wrench,
+      title: 'Electrical',
+      description: 'Complete electrical system repair and maintenance.',
+      features: ['Wiring repair', 'Alternator service', 'Starter repair', 'Lighting system'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Settings,
+      title: 'Cooling / Heating',
+      description: 'HVAC system repair and climate control maintenance.',
+      features: ['Air conditioning service', 'Heater repair', 'Climate control', 'Blower motor service'],
+      priceRange: 'Quote by call'
+    },
+    {
+      icon: Truck,
+      title: 'Trailer Repair',
+      description: 'Complete trailer repair and maintenance services.',
+      features: ['Trailer brake service', 'Lighting system repair', 'Suspension work', 'Structural repair'],
+      priceRange: 'Quote by call'
     }
   ];
 
@@ -134,7 +183,21 @@ export default function Services() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {services.map((service, index) => {
-            const IconComponent = service.icon || Wrench;
+            // Convert string icon to component
+            const iconMap: Record<string, React.ComponentType> = {
+              'wrench': Wrench,
+              'cog': Cog,
+              'shield': Shield,
+              'settings': Settings,
+              'alert-triangle': AlertTriangle,
+              'users': Users,
+              'truck': Truck,
+              'circle': Cog,
+              'zap': Wrench
+            };
+            const IconComponent = typeof service.icon === 'string' 
+              ? iconMap[service.icon] || Wrench 
+              : service.icon || Wrench;
             return (
               <motion.div
                 key={(service as any).id || index}
