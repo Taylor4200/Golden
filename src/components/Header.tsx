@@ -65,7 +65,7 @@ export default function Header() {
                 alt="Golden Heavy Duty Repair"
                 width={300}
                 height={120}
-                className="h-16 w-auto"
+                className="h-20 w-auto"
                 priority
               />
             </Link>

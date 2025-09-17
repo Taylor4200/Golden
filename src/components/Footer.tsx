@@ -4,19 +4,33 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, MapPin, Clock, Mail, Instagram } from 'lucide-react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { useServices } from '@/hooks/useServices';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { settings } = useSiteSettings();
+  const { services, isLoading } = useServices();
 
-  const services = [
-    'Engine Repair',
-    'Transmission Service',
-    'Brake Systems',
-    'Diagnostics',
-    'Emergency Service',
-    'Fleet Maintenance',
+  // Fallback services if loading or no data
+  const fallbackServices = [
+    'DOT Inspections',
+    'PM Services',
+    'Turbo Charger',
+    'Tires',
+    'Brakes',
+    'Cooling System Repairs',
+    'After Treatment Repairs',
+    'Regen',
+    'Suspension / Air Bags / Shocks',
+    'Wheel Seals',
+    'Electrical',
+    'Cooling / Heating',
+    'Trailer Repair',
+    'Mobile Service'
   ];
+
+  // Use all services from database, or fallback if loading
+  const displayServices = isLoading || services.length === 0 ? fallbackServices : services.map(service => service.name);
 
   const quickLinks = [
     { name: 'Home', href: '/' },
@@ -37,9 +51,9 @@ export default function Footer() {
               <Image
                 src="/Logo.png"
                 alt="Golden Heavy Duty Repair"
-                width={200}
-                height={80}
-                className="h-12 w-auto"
+                width={300}
+                height={120}
+                className="h-30 w-auto"
               />
             </Link>
             <p className="text-gray-300 text-sm leading-relaxed">
@@ -58,14 +72,14 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <h4 className="text-lg font-semibold">Our Services</h4>
-            <ul className="space-y-2">
-              {services.map((service) => (
+            <ul className="space-y-1">
+              {displayServices.map((service) => (
                 <li key={service}>
                   <Link 
                     href="/services" 
-                    className="text-gray-300 hover:text-primary transition-colors text-sm"
+                    className="text-gray-300 hover:text-primary transition-colors text-xs"
                   >
                     {service}
                   </Link>
