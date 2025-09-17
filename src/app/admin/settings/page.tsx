@@ -12,6 +12,7 @@ export default function AdminSettings() {
     contactEmail: 'breakdown@goldenheavyduty.com',
     contactPhone: '(303) 304-9993',
     address: '806 Cedar St, Hudson, CO 80642',
+    googleMapsUrl: 'https://maps.app.goo.gl/iPsAmeqCzYmESgeT8',
     hours: 'Mon-Fri: 9AM-9PM, Sat-Sun: 9AM-5PM, 24/7 Emergency',
     adminEmail: 'admin@goldenheavyduty.com',
     notifications: true
@@ -30,6 +31,7 @@ export default function AdminSettings() {
           contactEmail: settingsData.contact_email || 'breakdown@goldenheavyduty.com',
           contactPhone: settingsData.contact_phone || '(303) 304-9993',
           address: settingsData.address || '806 Cedar St, Hudson, CO 80642',
+          googleMapsUrl: settingsData.google_maps_url || 'https://maps.app.goo.gl/iPsAmeqCzYmESgeT8',
           hours: settingsData.business_hours || 'Mon-Fri: 9AM-9PM, Sat-Sun: 9AM-5PM, 24/7 Emergency',
           adminEmail: settingsData.admin_email || 'admin@goldenheavyduty.com',
           notifications: settingsData.notifications_enabled === 'true'
@@ -151,6 +153,21 @@ export default function AdminSettings() {
                   rows={2}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Google Maps URL
+                </label>
+                <input
+                  type="url"
+                  value={settings.googleMapsUrl}
+                  onChange={(e) => setSettings(prev => ({ ...prev, googleMapsUrl: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="https://maps.app.goo.gl/..."
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Use the Google Maps business listing URL for better branding
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">

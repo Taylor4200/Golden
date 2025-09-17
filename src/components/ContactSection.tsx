@@ -52,9 +52,9 @@ export default function ContactSection() {
     {
       icon: MapPin,
       title: 'Address',
-      details: '806 Cedar St, Hudson, CO 80642',
+      details: settings.address,
       description: 'Conveniently located off I-76',
-      action: 'https://maps.google.com/?q=806+Cedar+St,+Hudson,+CO+80642'
+      action: settings.googleMapsUrl
     },
     {
       icon: Clock,
@@ -167,7 +167,7 @@ export default function ContactSection() {
                 <motion.a
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  href="https://maps.google.com/?q=806+Cedar+St,+Hudson,+CO+80642"
+                  href={settings.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary inline-flex items-center space-x-2 shadow-glow"
@@ -189,7 +189,11 @@ export default function ContactSection() {
           >
             {/* Form Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-50" />
-            <h3 className="text-2xl font-bold text-secondary mb-6">Request Service</h3>
+            <h3 className="text-2xl font-bold text-secondary mb-2">Request Service</h3>
+            <p className="text-muted text-sm mb-6">
+              Fill out the form below and we'll respond within 24 hours. 
+              <span className="text-orange-600 font-medium"> For urgent repairs, use our chatbot for instant help!</span>
+            </p>
             
             {isSubmitted ? (
               <div className="text-center py-8">
@@ -290,8 +294,38 @@ export default function ContactSection() {
                 </motion.button>
 
                 <p className="text-sm text-muted text-center">
-                  * Required fields. We'll respond within 24 hours.
+                  * Required fields.
                 </p>
+                
+                {/* Chatbot CTA */}
+                <div className="mt-6 p-4 bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-lg">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-sm font-bold">!</span>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-orange-800 font-semibold text-sm mb-1">
+                        Need faster service?
+                      </h4>
+                      <p className="text-orange-700 text-xs mb-2">
+                        For urgent repairs or immediate assistance, use our chatbot for instant help and emergency dispatch.
+                      </p>
+                      <button
+                        onClick={() => {
+                          // Trigger chatbot open
+                          const chatbotButton = document.querySelector('[data-chatbot-trigger]') as HTMLElement;
+                          if (chatbotButton) {
+                            chatbotButton.click();
+                          }
+                        }}
+                        className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-medium px-3 py-2 rounded-md transition-colors flex items-center space-x-1"
+                      >
+                        <span>🚨</span>
+                        <span>Open Chatbot</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </form>
             )}
           </motion.div>

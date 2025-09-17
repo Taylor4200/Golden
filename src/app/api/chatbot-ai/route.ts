@@ -1,62 +1,121 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Free AI fallback using Cohere (more reliable than Hugging Face)
+async function getAIFallbackResponse(userMessage: string, conversationHistory?: any[]): Promise<string> {
+  try {
+    const apiKey = process.env.COHERE_API_KEY;
+    if (!apiKey) {
+      console.log('No Cohere API key found, using fallback response');
+      return "I'm an AI assistant for Golden Heavy Duty Truck Repair. I can help with truck repair questions, scheduling, and emergency assistance. What can I help you with today?";
+    }
+
+    // Use Cohere's new Chat API - much more reliable
+    const response = await fetch('https://api.cohere.ai/v1/chat', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: process.env.COHERE_MODEL || 'command-r7b-12-2024',
+        message: userMessage,
+        chat_history: conversationHistory || [],
+        system_prompt: `You are the AI chatbot for Golden Heavy Duty Truck Repair in Hudson, CO. You are NOT Command or any other AI model. You are specifically designed to help customers with truck repair questions, scheduling appointments, getting quotes, and emergency assistance. 
+
+Your identity: You are Golden Heavy Duty's AI assistant, created specifically for this truck repair business. You know about truck repair, our services, and can help customers get the assistance they need.
+
+Always be friendly and professional. Keep responses concise and helpful. When asked about yourself, say you are the AI assistant for Golden Heavy Duty Truck Repair.
+
+IMPORTANT: Only suggest forms, appointments, or quotes when the user actually needs service or asks for them. For general questions, just answer conversationally. Don't push forms on users who are just asking questions or making small talk.`,
+        max_tokens: 200,
+        temperature: 0.7
+      }),
+    });
+
+    if (!response.ok) {
+      console.log(`Cohere API error: ${response.status} ${response.statusText}`);
+      const errorText = await response.text();
+      console.log('Error details:', errorText);
+      return "I'm an AI assistant for Golden Heavy Duty Truck Repair. I can help with truck repair questions, scheduling, and emergency assistance. What can I help you with today?";
+    }
+
+    const data = await response.json();
+    console.log('Cohere API response:', data);
+    
+    if (data && data.text) {
+      const aiResponse = data.text.trim();
+      
+      if (aiResponse && aiResponse.length > 10) {
+        return aiResponse;
+      }
+    }
+    
+    // Fallback if AI response is too short or invalid
+    return "I'm an AI assistant for Golden Heavy Duty Truck Repair. I can help with truck repair questions, scheduling, and emergency assistance. What can I help you with today?";
+    
+  } catch (error) {
+    console.error('AI fallback error:', error);
+    return "I'm an AI assistant for Golden Heavy Duty Truck Repair. I can help with truck repair questions, scheduling, and emergency assistance. What can I help you with today?";
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const { message, context } = await request.json();
+    const { message, context, conversationHistory } = await request.json();
 
-    // Simple keyword-based AI responses for truck repair context
+    // Conversational AI responses for truck repair context
     const responses = {
       greeting: [
-        "Hello! Welcome to Golden Heavy Duty Truck Repair. I'm here to help with all your truck repair needs. How can I assist you today?",
-        "Hi there! Thanks for reaching out to Golden Heavy Duty. What can I help you with today?",
-        "Hello! I'm here to help with your truck repair needs. Whether you need emergency service, want to schedule an appointment, or have questions, I'm here to assist you.",
-        "Hi! Welcome to Golden Heavy Duty. I'm ready to help with any truck repair questions or services you need. What's going on with your truck?"
+        "Hey there! 👋 I'm your AI assistant for Golden Heavy Duty Truck Repair. I'm here 24/7 to help with any truck issues you might have. What's going on with your rig?",
+        "Hi! I'm an AI assistant that specializes in truck repair. I can help diagnose issues, schedule service, or get you emergency help. What's happening with your truck?",
+        "Hello! I'm an AI assistant for Golden Heavy Duty. I'm pretty good at understanding truck problems and can get you connected with our expert mechanics. What's troubling your truck?",
+        "Hey! I'm an AI assistant that knows a thing or two about trucks. Whether it's a weird noise, won't start, or just needs maintenance - I'm here to help! What's up?"
       ],
       help: [
-        "I understand you need help. Let me gather some information so I can connect you with the right person on our team.",
-        "I'm here to help! Let me collect some details about your truck and the issue so I can get you the assistance you need.",
-        "I can definitely help you with that. Let me gather some information about your truck and service requirements.",
-        "I'm ready to help! Let me get some details about your situation so I can connect you with the right specialist."
+        "I'm an AI assistant, so I can't physically fix your truck, but I'm really good at understanding problems and getting you connected with our expert mechanics! Let me gather some details so I can help you properly.",
+        "As an AI, I can help diagnose issues and connect you with the right people. Let me ask a few questions about your truck so I can get you the best help possible.",
+        "I'm an AI assistant that specializes in truck repair knowledge. While I can't turn wrenches myself, I can definitely help figure out what's wrong and get you connected with our certified mechanics.",
+        "I'm here as an AI assistant to help troubleshoot and connect you with our team. Let me gather some info about your truck so I can get you the right assistance."
       ],
       emergency: [
-        "🚨 I understand this is urgent! Let me get you help right away. Our emergency team is standing by.",
-        "🚨 Emergency situation detected! I'm connecting you with our 24/7 emergency response team immediately.",
-        "🚨 I see you need immediate assistance. Let me get our emergency team on the line for you right now."
+        "🚨 Oh no! That sounds urgent! As an AI, I can't physically help, but I can definitely get our emergency team dispatched to you right away. Let me gather some quick details so they know exactly what they're dealing with.",
+        "🚨 Emergency situation! I'm an AI assistant, but I'm programmed to get you immediate help. Our 24/7 emergency team is standing by - let me get them your info ASAP!",
+        "🚨 That sounds serious! I'm an AI that specializes in emergency dispatch. Let me quickly collect your details so our emergency team can get to you fast."
       ],
       engine: [
-        "I can help with your engine issue! Our certified engine specialists are available. Let me gather some details.",
-        "Engine problems can be serious. I'll connect you with our engine repair experts who can diagnose the issue quickly.",
-        "Our engine specialists have years of experience with all makes and models. Let me get you connected."
+        "Engine trouble, huh? As an AI, I can't pop the hood myself, but I'm pretty good at understanding engine issues! Let me ask some questions so I can connect you with our engine specialists who can actually fix it.",
+        "Engine problems are my specialty! Well, diagnosing them anyway - I'm an AI so I can't actually turn wrenches. But I can definitely help figure out what's wrong and get you connected with our certified engine mechanics.",
+        "Ah, engine issues! I'm an AI assistant that knows engines pretty well. Let me gather some details about what's happening so I can get you connected with our engine experts who can actually fix it."
       ],
       transmission: [
-        "Transmission issues need expert attention. I'll connect you with our transmission specialists right away.",
-        "Our transmission experts can diagnose and repair all types of transmission problems. Let me gather some details.",
-        "Transmission repairs are our specialty. I'll get you connected with the right technician for your truck."
+        "Transmission problems are tricky! I'm an AI that understands transmissions, but I'll need to connect you with our transmission specialists who can actually work on it. Let me get some details first.",
+        "Transmission trouble? I'm an AI assistant that knows transmissions inside and out (theoretically anyway!). Let me ask a few questions so I can get you connected with our transmission experts.",
+        "Transmission issues can be complex! As an AI, I can help diagnose the problem, but I'll need to connect you with our certified transmission specialists for the actual repair."
       ],
       brake: [
-        "Brake issues are safety-critical! I'll connect you with our brake system specialists immediately.",
-        "Our brake experts can handle all brake system repairs and DOT compliance. Let me get you the help you need.",
-        "Brake problems require immediate attention. I'll connect you with our certified brake technicians."
+        "Brake problems are serious business! I'm an AI that takes safety very seriously. Let me gather some details about your brake issue so I can get you connected with our brake specialists ASAP.",
+        "Brake issues are critical! As an AI assistant, I can't physically check your brakes, but I can definitely help get you connected with our certified brake technicians who can.",
+        "Safety first! I'm an AI that knows brakes are nothing to mess with. Let me get some details about your brake problem so I can connect you with our brake experts."
       ],
       tire: [
-        "Tire service is one of our specialties! I can help you with mounting, balancing, alignment, and repairs.",
-        "Our tire experts can handle all your wheel and tire needs. Let me gather some information about your situation.",
-        "Tire issues can affect safety and fuel efficiency. I'll connect you with our tire service specialists."
+        "Tire issues? I'm an AI that knows tires can make or break your day! Let me gather some details about your tire problem so I can get you connected with our tire service team.",
+        "Tire trouble! As an AI assistant, I can't change tires myself, but I can definitely help you get connected with our tire specialists who can get you back on the road.",
+        "Tire problems are frustrating! I'm an AI that understands tire issues. Let me ask a few questions so I can connect you with our tire service experts."
       ],
       electrical: [
-        "Electrical problems can be tricky to diagnose. Our electrical specialists have the latest diagnostic equipment.",
-        "Our certified electricians can handle all electrical system issues. Let me get you connected with the right expert.",
-        "Electrical diagnostics require specialized equipment. I'll connect you with our electrical system specialists."
+        "Electrical gremlins! I'm an AI that actually understands electrical systems pretty well! Let me gather some details about your electrical issue so I can connect you with our electrical specialists.",
+        "Electrical problems can be mysterious! As an AI assistant, I'm good at troubleshooting electrical issues (in theory!). Let me get some info so I can connect you with our electrical experts.",
+        "Electrical issues are tricky! I'm an AI that knows electrical systems, but I'll need to connect you with our certified electrical technicians who can actually fix it."
       ],
       quote: [
-        "I'd be happy to help you get a free quote! Let me collect some information about your truck and service needs.",
-        "Our quotes are always free and detailed. I'll gather the information needed to give you an accurate estimate.",
-        "Getting a quote is easy! Let me collect some details about your truck and the service you need."
+        "I'd love to help you get a free quote! As an AI, I can't give you exact prices, but I can definitely gather your info and connect you with our team who can give you a detailed estimate.",
+        "Free quotes are my specialty! Well, gathering the info for them anyway. Let me ask some questions about your truck so I can get you connected with our team for an accurate estimate.",
+        "Getting quotes is easy with me! I'm an AI that knows how to collect the right info. Let me gather some details about your truck so our team can give you a proper estimate."
       ],
       appointment: [
-        "Perfect! Let's get you scheduled. I'll need a few details about your truck and the service you need.",
-        "Scheduling is simple! Let me gather some information to get you the best appointment time.",
-        "I'll help you find the perfect appointment time. Let me collect some details about your service needs."
+        "Perfect! Let's get you scheduled. As an AI, I can't actually book appointments myself, but I can gather your info and connect you with our scheduling team!",
+        "Scheduling is simple! I'm an AI assistant that knows how to get you the best appointment times. Let me collect some details so I can connect you with our team.",
+        "I'll help you find the perfect appointment time! Let me gather some info about your truck and service needs so I can get you connected with our scheduling team."
       ],
       location: [
         "We're located at 806 Cedar St, Hudson, CO 80642. We serve Hudson, Fort Collins, Greeley, and surrounding Colorado areas.",
@@ -74,11 +133,11 @@ export async function POST(request: NextRequest) {
         "Fleet management is our expertise! Let me gather some information to provide you with the best fleet solution."
       ],
       default: [
-        "I understand you need help. Let me gather some information so I can connect you with the right person on our team.",
-        "I'm here to help with your truck repair needs. Let me collect some details to get you the assistance you need.",
-        "I can help you with that! Let me gather some information about your truck and service requirements.",
-        "I'm ready to assist you with your truck repair needs. Let me get some details about your situation.",
-        "I can definitely help you with that. Let me collect some information to get you the right assistance."
+        "I'm an AI assistant that specializes in truck repair, so I can help with most truck-related questions! While I can't physically fix your truck, I'm really good at understanding problems and getting you connected with our expert mechanics.",
+        "As an AI, I'm here to help troubleshoot and connect you with our team! I can understand most truck issues and get you the right help. Let me gather some details about your situation.",
+        "I'm an AI assistant that knows trucks pretty well! I can help diagnose issues and connect you with our certified mechanics. Let me ask a few questions so I can get you the best assistance.",
+        "I'm here as an AI to help with your truck needs! I can't turn wrenches myself, but I'm great at understanding problems and getting you connected with our expert team.",
+        "I'm an AI that specializes in truck repair knowledge! Let me gather some information about your truck so I can connect you with the right people who can actually help."
       ]
     };
 
@@ -86,53 +145,74 @@ export async function POST(request: NextRequest) {
     const messageLower = message.toLowerCase();
     let category = 'default';
     
-    // Greeting responses
-    if (messageLower.includes('hello') || messageLower.includes('hi') || messageLower.includes('hey') || messageLower.includes('good morning') || messageLower.includes('good afternoon') || messageLower.includes('good evening')) {
-      category = 'greeting';
-    }
-    // Help requests
-    else if (messageLower.includes('help') || messageLower.includes('need help') || messageLower.includes('assistance') || messageLower.includes('problem') || messageLower.includes('issue') || messageLower.includes('broken') || messageLower.includes('fix') || messageLower.includes('repair')) {
-      category = 'help';
-    }
-    // Emergency keywords
-    else if (messageLower.includes('emergency') || messageLower.includes('urgent') || messageLower.includes('stuck') || messageLower.includes('broken down')) {
-      category = 'emergency';
-    }
-    // Service-related keywords
-    else if (messageLower.includes('engine')) {
-      category = 'engine';
-    } else if (messageLower.includes('transmission')) {
-      category = 'transmission';
-    } else if (messageLower.includes('brake')) {
-      category = 'brake';
-    } else if (messageLower.includes('tire')) {
-      category = 'tire';
-    } else if (messageLower.includes('electrical')) {
-      category = 'electrical';
-    } else if (messageLower.includes('price') || messageLower.includes('cost') || messageLower.includes('quote')) {
-      category = 'quote';
-    } else if (messageLower.includes('appointment') || messageLower.includes('schedule') || messageLower.includes('book')) {
-      category = 'appointment';
-    } else if (messageLower.includes('where') || messageLower.includes('location') || messageLower.includes('address')) {
-      category = 'location';
-    } else if (messageLower.includes('hours') || messageLower.includes('open') || messageLower.includes('closed')) {
-      category = 'hours';
-    } else if (messageLower.includes('fleet') || messageLower.includes('multiple') || messageLower.includes('company')) {
-      category = 'fleet';
-    }
-    // General service keywords that should trigger form
-    else if (messageLower.includes('service') || messageLower.includes('work') || messageLower.includes('maintenance') || messageLower.includes('inspection') || messageLower.includes('diagnostic') || messageLower.includes('truck') || messageLower.includes('vehicle')) {
-      category = 'help';
+    // Enhanced fuzzy intent detection
+    const intentPatterns = {
+      greeting: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings'],
+      help: ['help', 'need help', 'assistance', 'problem', 'issue', 'broken', 'fix', 'repair', 'trouble', 'malfunction'],
+      emergency: ['emergency', 'urgent', 'stuck', 'broken down', 'stranded', 'asap', 'immediately', 'help me', 'need help now', 'critical', 'desperate'],
+      engine: ['engine', 'motor', 'won\'t start', 'cranks', 'stalls', 'overheating', 'smoke', 'knocking', 'rough idle'],
+      transmission: ['transmission', 'gearbox', 'shifting', 'clutch', 'automatic', 'manual', 'gear', 'stuck in gear'],
+      brake: ['brake', 'brakes', 'stopping', 'pedal', 'squeaking', 'grinding', 'soft pedal', 'pulling'],
+      tire: ['tire', 'tyre', 'flat', 'blowout', 'tread', 'alignment', 'balancing', 'pressure'],
+      electrical: ['electrical', 'wiring', 'battery', 'alternator', 'starter', 'lights', 'fuse', 'short circuit'],
+      quote: ['price', 'cost', 'quote', 'estimate', 'how much', 'pricing', 'rates'],
+      appointment: ['appointment', 'schedule', 'book', 'reserve', 'time slot', 'availability'],
+      location: ['where', 'location', 'address', 'directions', 'find', 'located'],
+      hours: ['hours', 'open', 'closed', 'business hours', 'operating hours', 'when open'],
+      fleet: ['fleet', 'multiple', 'company', 'business', 'commercial', 'fleet management']
+    };
+
+    // Check for fuzzy matches with word boundaries to avoid false positives
+    for (const [intent, patterns] of Object.entries(intentPatterns)) {
+      if (patterns.some(pattern => {
+        // Use word boundaries for exact word matches
+        const regex = new RegExp(`\\b${pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+        return regex.test(messageLower);
+      })) {
+        category = intent;
+        break;
+      }
     }
 
-    // Get random response from the appropriate category
-    const categoryResponses = responses[category as keyof typeof responses];
-    const randomResponse = categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+    // Hybrid system: Use pre-written responses for critical intents, AI for others
+    const criticalIntents = ['emergency', 'location', 'hours', 'quote', 'appointment'];
+    let finalResponse: string;
+    let shouldShowForm: boolean;
+
+    if (criticalIntents.includes(category)) {
+      // Use pre-written responses for critical intents (reliable, safe)
+      const categoryResponses = responses[category as keyof typeof responses];
+      finalResponse = categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+      shouldShowForm = ['emergency', 'quote', 'appointment'].includes(category);
+    } else {
+      // Use AI fallback for other categories (flexible, conversational)
+      const aiResponse = await getAIFallbackResponse(message, conversationHistory);
+      finalResponse = aiResponse;
+      
+      // Smart form detection - only show form if user actually needs service
+      const serviceKeywords = ['appointment', 'quote', 'schedule', 'book', 'service', 'repair', 'fix', 'help me', 'need help', 'broken', 'issue', 'problem', 'engine', 'transmission', 'brake', 'tire', 'electrical'];
+      const hasServiceKeywords = serviceKeywords.some(keyword => {
+        const regex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+        return regex.test(message.toLowerCase());
+      });
+      const aiSuggestsForm = aiResponse.toLowerCase().includes('form') || aiResponse.toLowerCase().includes('appointment') || aiResponse.toLowerCase().includes('quote');
+      
+      // Only show form if user is asking for actual service, not general questions
+      const isGeneralQuestion = message.toLowerCase().includes('what model') || 
+                               message.toLowerCase().includes('how are you') || 
+                               message.toLowerCase().includes('who are you') ||
+                               message.toLowerCase().includes('what are you') ||
+                               message.toLowerCase().includes('tell me about');
+      
+      // Combine both user intent and AI suggestion for form detection
+      shouldShowForm = (hasServiceKeywords || aiSuggestsForm) && !isGeneralQuestion;
+    }
 
     return NextResponse.json({ 
-      response: randomResponse,
+      response: finalResponse,
       category,
-      shouldShowForm: ['help', 'emergency', 'engine', 'transmission', 'brake', 'tire', 'electrical', 'quote', 'appointment', 'fleet', 'default'].includes(category)
+      shouldShowForm,
+      isAIResponse: !criticalIntents.includes(category)
     });
 
   } catch (error) {

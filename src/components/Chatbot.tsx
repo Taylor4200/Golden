@@ -43,6 +43,7 @@ interface LeadData {
   truckMake: string;
   truckModel: string;
   issue: string;
+  location?: string;
   isFleet: boolean;
   fleetSize?: string;
   preferredContact: 'phone' | 'email';
@@ -167,26 +168,21 @@ export default function Chatbot() {
   };
 
   const handleEmergency = () => {
-    // Send emergency notification immediately
-    const emergencyLead: LeadNotification = {
-      type: 'emergency',
-      name: 'Emergency Contact',
-      phone: 'Emergency Request',
-      urgency: 'emergency',
-      issue: 'Emergency roadside assistance requested via chatbot',
-      timestamp: new Date().toISOString(),
-      source: 'chatbot'
-    };
-
-    sendLeadNotification(emergencyLead).catch(error => {
-      console.error('Failed to send emergency notification:', error);
-    });
-
+    // First show the emergency message
     addMessage(
       `🚨 **EMERGENCY ASSISTANCE**\n\nWe'll get you back on the road fast!\n\n📞 **Call us now:** ${settings.contactPhone}\n\n📍 **Our location:** ${settings.address}\n\nShare your location and truck issue - we'll dispatch help immediately.`,
-      true,
-      'emergency'
+      true
     );
+    
+    // Then show the emergency form
+    setTimeout(() => {
+      setCurrentStep('emergency_form');
+      addMessage(
+        `Or fill out this quick form and we'll dispatch help immediately:`,
+        true,
+        'emergency_form'
+      );
+    }, 1000);
   };
 
   const handleAppointment = () => {
@@ -210,11 +206,13 @@ export default function Chatbot() {
   };
 
   const handleFormSubmit = () => {
-    if (currentStep === 'appointment_form' || currentStep === 'quote_form') {
+    if (currentStep === 'appointment_form' || currentStep === 'quote_form' || currentStep === 'emergency_form') {
       if (currentStep === 'appointment_form') {
         completeAppointment();
-      } else {
+      } else if (currentStep === 'quote_form') {
         completeQuote();
+      } else if (currentStep === 'emergency_form') {
+        completeEmergency();
       }
     }
   };
@@ -295,6 +293,33 @@ export default function Chatbot() {
     setLeadData({});
   };
 
+  const completeEmergency = async () => {
+    // Send emergency notification immediately
+    const emergencyLead: LeadNotification = {
+      type: 'emergency',
+      name: leadData.name || 'Emergency Contact',
+      phone: leadData.phone || 'Emergency Request',
+      urgency: 'emergency',
+      issue: leadData.issue || 'Emergency roadside assistance requested via chatbot',
+      timestamp: new Date().toISOString(),
+      source: 'chatbot'
+    };
+
+    try {
+      await sendLeadNotification(emergencyLead);
+    } catch (error) {
+      console.error('Failed to send emergency notification:', error);
+    }
+
+    addMessage(
+      `🚨 **EMERGENCY DISPATCHED!**\n\n**Name:** ${leadData.name}\n**Phone:** ${leadData.phone}\n**Issue:** ${leadData.issue}\n**Location:** ${leadData.location || 'Please share your location'}\n\nOur emergency team has been notified and will contact you within 5 minutes.\n\n📞 **Still need immediate help?** Call ${settings.contactPhone} now!`,
+      true
+    );
+    
+    setCurrentStep('completed');
+    setLeadData({});
+  };
+
   const getIntelligentResponse = async (userMessage: string): Promise<{ response: string; shouldShowForm: boolean }> => {
     try {
       const response = await fetch('/api/chatbot-ai', {
@@ -334,6 +359,18 @@ export default function Chatbot() {
     const userMessage = input.value.trim();
     addMessage(userMessage, false);
     input.value = '';
+
+    // Check for emergency keywords first
+    const emergencyKeywords = ['emergency', 'urgent', 'stuck', 'broken down', 'stranded', 'help', 'asap', 'immediately'];
+    const isEmergency = emergencyKeywords.some(keyword => 
+      userMessage.toLowerCase().includes(keyword)
+    );
+
+    // If emergency detected, trigger emergency flow immediately
+    if (isEmergency) {
+      handleEmergency();
+      return;
+    }
 
     // Handle different conversation steps
     if (currentStep === 'appointment_name') {
@@ -416,6 +453,7 @@ export default function Chatbot() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={openChat}
+          data-chatbot-trigger
           className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 bg-gradient-to-r from-primary to-primary-dark text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-glow-lg transition-all duration-300 group"
         >
           <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -512,6 +550,66 @@ export default function Chatbot() {
                               <span className="text-sm">{option.text}</span>
                             </button>
                           ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {message.type === 'emergency_form' && (
+                      <div className="space-y-2">
+                        <div className="bg-red-50 p-3 rounded-lg space-y-3 border border-red-200">
+                          <div className="flex items-center space-x-2 mb-3">
+                            <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-xs font-bold">!</span>
+                            </div>
+                            <span className="text-sm font-semibold text-red-800">Emergency Form</span>
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Your Name *</label>
+                            <input
+                              type="text"
+                              value={leadData.name || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, name: e.target.value }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                              placeholder="Your full name"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Phone Number *</label>
+                            <input
+                              type="tel"
+                              value={leadData.phone || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, phone: e.target.value }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                              placeholder="(303) 555-0123"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Current Location *</label>
+                            <input
+                              type="text"
+                              value={leadData.location || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, location: e.target.value }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                              placeholder="Highway, mile marker, or address"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Truck Issue *</label>
+                            <textarea
+                              value={leadData.issue || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, issue: e.target.value }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                              placeholder="What's wrong with your truck?"
+                              rows={2}
+                            />
+                          </div>
+                          <button
+                            onClick={handleFormSubmit}
+                            disabled={!leadData.name || !leadData.phone || !leadData.location || !leadData.issue}
+                            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-2 px-4 rounded text-sm font-medium transition-colors"
+                          >
+                            🚨 Dispatch Emergency Help
+                          </button>
                         </div>
                       </div>
                     )}

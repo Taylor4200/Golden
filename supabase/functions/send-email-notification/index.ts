@@ -103,7 +103,7 @@ serve(async (req) => {
           
           <div class="footer">
             <p>This lead was automatically generated from your website chatbot.</p>
-            <p>Golden Heavy Duty Truck Repair | 806 Cedar St, Hudson, CO 80642</p>
+            <p>Golden Heavy Duty Truck Repair | <a href="https://maps.app.goo.gl/iPsAmeqCzYmESgeT8" style="color: #d4af37;">806 Cedar St, Hudson, CO 80642</a></p>
           </div>
         </div>
       </body>

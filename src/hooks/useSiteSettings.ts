@@ -7,6 +7,7 @@ export interface SiteSettings {
   contactEmail: string;
   contactPhone: string;
   address: string;
+  googleMapsUrl: string;
   businessHours: string;
   adminEmail: string;
   notificationsEnabled: boolean;
@@ -19,6 +20,7 @@ export function useSiteSettings() {
     contactEmail: 'breakdown@goldenheavyduty.com',
     contactPhone: '(303) 304-9993',
     address: '806 Cedar St, Hudson, CO 80642',
+    googleMapsUrl: 'https://maps.app.goo.gl/iPsAmeqCzYmESgeT8',
     businessHours: 'Mon-Fri: 9AM-9PM, Sat-Sun: 9AM-5PM, 24/7 Emergency',
     adminEmail: 'admin@goldenheavyduty.com',
     notificationsEnabled: true
@@ -36,6 +38,7 @@ export function useSiteSettings() {
           contactEmail: settingsData.contact_email || 'breakdown@goldenheavyduty.com',
           contactPhone: settingsData.contact_phone || '(303) 304-9993',
           address: settingsData.address || '806 Cedar St, Hudson, CO 80642',
+          googleMapsUrl: settingsData.google_maps_url || 'https://maps.app.goo.gl/iPsAmeqCzYmESgeT8',
           businessHours: settingsData.business_hours || 'Mon-Fri: 9AM-9PM, Sat-Sun: 9AM-5PM, 24/7 Emergency',
           adminEmail: settingsData.admin_email || 'admin@goldenheavyduty.com',
           notificationsEnabled: settingsData.notifications_enabled === 'true'
