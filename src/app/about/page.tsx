@@ -61,9 +61,8 @@ export default function About() {
               {/* Text column, vertically centered */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
-                viewport={{ once: true }}
                 className="flex items-center justify-center"
               >
                 <div className="max-w-[700px] w-full pl-6 lg:pl-12">
@@ -96,9 +95,8 @@ export default function About() {
               {/* Image column */}
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
-                viewport={{ once: true }}
                 className="relative flex items-center"
               >
                 <img
@@ -120,15 +118,14 @@ export default function About() {
           <div className="w-full px-6 sm:px-12 lg:px-20">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
               className="text-center mb-16"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Our <span className="text-primary">Values</span>
               </h2>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
+              <p className="text-xl text-muted max-w-3xl mx-auto text-center">
                 These core principles guide everything we do and ensure you receive
                 the best possible service every time.
               </p>
@@ -139,9 +136,8 @@ export default function About() {
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
                   className="card text-center group hover:shadow-xl transition-all duration-300"
                 >
                   <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 transition-colors">
@@ -162,13 +158,13 @@ export default function About() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
               className="text-center mb-16"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Meet Our <span className="text-primary">Founders</span>
               </h2>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
+              <p className="text-xl text-muted max-w-3xl mx-auto text-center">
                 Brandon and Tyler founded Golden Heavy Duty with a vision to provide
                 reliable, professional heavy-duty truck repair services to Northern Colorado.
               </p>
@@ -182,7 +178,7 @@ export default function About() {
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.2 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false, margin: "-100px" }}
                     className="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 text-center"
                   >
                     <div className="w-24 h-24 rounded-full mx-auto mb-6 bg-primary/10 flex items-center justify-center">
@@ -219,7 +215,7 @@ export default function About() {
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, margin: "-100px" }}
                 className="relative"
               >
                 <img
@@ -238,7 +234,7 @@ export default function About() {
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, margin: "-100px" }}
               >
                 <div className="max-w-[700px]">
                   <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
@@ -267,6 +263,33 @@ export default function About() {
                         <span>Climate-controlled parts storage and inventory management</span>
                       </li>
                     </ul>
+                    
+                    {/* Google Maps Embed */}
+                    <div className="mt-8">
+                      <h3 className="text-lg font-semibold text-secondary mb-4">Visit Our Facility</h3>
+                      <div className="w-full h-64 rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+                        <iframe
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3048.1234567890!2d-104.6432746!3d40.076015!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c3fa1922d702b%3A0x98acadf5a36fd384!2sGolden%20Heavy%20Duty%20Repair!5e0!3m2!1sen!2sus!4v1234567890"
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          allowFullScreen
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          title="Golden Heavy Duty Repair Facility Location"
+                        ></iframe>
+                      </div>
+                      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <div className="flex items-start space-x-3">
+                          <MapPin className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                          <div>
+                            <h4 className="font-semibold text-gray-800">Golden Heavy Duty Repair</h4>
+                            <p className="text-gray-600 text-sm">806 Cedar St, Hudson, CO 80642</p>
+                            <p className="text-gray-500 text-xs mt-1">Mon-Fri: 9AM-9PM, Sat-Sun: 9AM-5PM</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -281,12 +304,12 @@ export default function About() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">
                 Ready to Experience the Golden Heavy Duty Difference?
               </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-300 mb-8 text-center">
                 Join hundreds of satisfied customers who trust us with their heavy-duty truck repair needs.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -12,8 +12,7 @@ import {
   Users,
   CheckCircle,
   Clock,
-  DollarSign,
-  Award
+  DollarSign
 } from 'lucide-react';
 
 
@@ -32,8 +31,7 @@ export default function Services() {
         'Cooling System Repair',
         'Preventive Maintenance Programs'
       ],
-      pricing: 'Call for quote',
-      warranty: '12-month warranty on all engine work'
+      pricing: 'Call for quote'
     },
     {
       icon: Cog,
@@ -48,8 +46,7 @@ export default function Services() {
         'Shift Solenoid Service',
         'Manual & Automatic Transmissions'
       ],
-      pricing: 'Call for quote',
-      warranty: '18-month warranty on transmission rebuilds'
+      pricing: 'Call for quote'
     },
     {
       icon: Shield,
@@ -64,8 +61,7 @@ export default function Services() {
         'Brake Line Repair',
         'Emergency Brake Service'
       ],
-      pricing: 'Call for quote',
-      warranty: '6-month warranty on brake components'
+      pricing: 'Call for quote'
     },
     {
       icon: Settings,
@@ -80,8 +76,7 @@ export default function Services() {
         'ECM/PCM Programming',
         'Performance Analysis'
       ],
-      pricing: 'Call for quote',
-      warranty: '90-day warranty on diagnostic work'
+      pricing: 'Call for quote'
     },
     {
       icon: AlertTriangle,
@@ -96,8 +91,7 @@ export default function Services() {
         'Fuel Delivery',
         'Lockout Service'
       ],
-      pricing: 'Call for emergency rates',
-      warranty: 'Immediate response guarantee'
+      pricing: 'Call for emergency rates'
     },
     {
       icon: Users,
@@ -112,8 +106,7 @@ export default function Services() {
         'Service History Tracking',
         'Custom Maintenance Plans'
       ],
-      pricing: 'Volume discounts available',
-      warranty: 'Comprehensive service agreements'
+      pricing: 'Volume discounts available'
     }
   ];
 
@@ -165,90 +158,55 @@ export default function Services() {
     <div className="min-h-screen">
       <Header />
       <main>
-        {/* Hero Section */}
-        <section className="pt-32 pb-20 bg-gradient-to-br from-secondary to-gray-900 text-white">
-          <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center"
-            >
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Heavy Duty <span className="text-primary">Truck Services</span>
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                From routine maintenance to major repairs, we provide comprehensive 
-                heavy-duty truck services to keep your fleet running at peak performance.
-              </p>
-            </motion.div>
-          </div>
-        </section>
 
         {/* Main Services */}
         <section className="py-20 bg-white">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
+              className="text-center mb-20 px-4"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-secondary mb-6">
                 Our <span className="text-primary">Services</span>
               </h2>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
+              <p className="text-lg md:text-xl text-muted leading-relaxed text-center">
                 Professional heavy-duty truck repair services backed by years of experience 
                 and a commitment to quality workmanship.
               </p>
             </motion.div>
 
-            <div className="space-y-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 px-4">
               {services.map((service, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
-                    index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-                  }`}
+                  className="card group hover:shadow-xl transition-all duration-300 border-l-4 border-l-primary"
                 >
-                  <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
-                    <div className="flex items-center space-x-4 mb-6">
-                      <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center">
+                  <div className="p-6 lg:p-8">
+                    <div className="flex items-center space-x-4 mb-8">
+                      <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                         <service.icon className="h-8 w-8 text-primary" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-bold text-secondary">{service.title}</h3>
-                        <p className="text-primary font-semibold">{service.pricing}</p>
+                        <h3 className="text-xl font-bold text-secondary">{service.title}</h3>
+                        <p className="text-primary font-semibold text-sm">{service.pricing}</p>
                       </div>
                     </div>
-                    <p className="text-muted leading-relaxed mb-6">{service.description}</p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <p className="text-muted leading-relaxed mb-8">{service.description}</p>
+                    
+                    <div className="space-y-4">
                       {service.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center space-x-2">
-                          <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                          <span className="text-sm text-muted">{feature}</span>
+                        <div key={featureIndex} className="flex items-start space-x-3">
+                          <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                          <span className="text-sm text-muted leading-relaxed">{feature}</span>
                         </div>
                       ))}
                     </div>
-
-                    <div className="flex items-center space-x-2 text-sm text-primary font-semibold">
-                      <Award className="h-4 w-4" />
-                      <span>{service.warranty}</span>
-                    </div>
-                  </div>
-
-                  <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
-                    <img
-                      src="/bill-griepenstroh-Q9X_p5dDq_8-unsplash.jpg"
-                      alt={service.title}
-                      className="rounded-2xl shadow-2xl w-full"
-                    />
                   </div>
                 </motion.div>
               ))}
@@ -263,29 +221,32 @@ export default function Services() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
               className="text-center mb-16"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Additional <span className="text-primary">Services</span>
               </h2>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
+              <p className="text-xl text-muted text-center">
                 We also provide a wide range of additional services to keep your truck 
                 in top condition.
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {additionalServices.map((service, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.05 }}
-                  viewport={{ once: true }}
-                  className="card text-center hover:shadow-lg transition-all duration-300"
+                  viewport={{ once: false, margin: "-100px" }}
+                  className="bg-white rounded-lg p-6 text-center hover:shadow-lg hover:border-primary/20 border border-gray-200 transition-all duration-300 group"
                 >
-                  <p className="text-sm font-medium text-secondary">{service}</p>
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+                    <Wrench className="h-6 w-6 text-primary" />
+                  </div>
+                  <p className="text-sm font-medium text-secondary leading-relaxed">{service}</p>
                 </motion.div>
               ))}
             </div>
@@ -299,35 +260,47 @@ export default function Services() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
               className="text-center mb-16"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Our Service <span className="text-primary">Process</span>
               </h2>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
+              <p className="text-xl text-muted text-center">
                 We follow a proven process to ensure quality service and customer satisfaction 
                 every time.
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {process.map((step, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="card text-center group hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
-                    {step.step}
-                  </div>
-                  <h3 className="text-xl font-bold text-secondary mb-4">{step.title}</h3>
-                  <p className="text-muted leading-relaxed">{step.description}</p>
-                </motion.div>
-              ))}
+            <div className="relative">
+              {/* Connection line for desktop */}
+              <div className="hidden lg:block absolute top-8 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20"></div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+                {process.map((step, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: false, margin: "-100px" }}
+                    className="card text-center group hover:shadow-xl transition-all duration-300 relative"
+                  >
+                    <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg group-hover:scale-110 transition-transform">
+                      {step.step}
+                    </div>
+                    <h3 className="text-xl font-bold text-secondary mb-4">{step.title}</h3>
+                    <p className="text-muted leading-relaxed">{step.description}</p>
+                    
+                    {/* Arrow connector for mobile */}
+                    {index < process.length - 1 && (
+                      <div className="lg:hidden flex justify-center mt-6">
+                        <div className="w-0.5 h-8 bg-primary/30"></div>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -339,7 +312,7 @@ export default function Services() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
               className="text-center mb-16"
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -352,12 +325,14 @@ export default function Services() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="text-center"
+                viewport={{ once: false, margin: "-100px" }}
+                className="text-center group"
               >
-                <Clock className="h-16 w-16 text-primary mx-auto mb-6" />
+                <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/30 transition-colors">
+                  <Clock className="h-10 w-10 text-primary" />
+                </div>
                 <h3 className="text-xl font-bold mb-4">Fast Turnaround</h3>
-                <p className="text-gray-300">
+                <p className="text-gray-300 leading-relaxed">
                   We understand downtime costs money. Our efficient processes and experienced 
                   team get you back on the road quickly.
                 </p>
@@ -367,12 +342,14 @@ export default function Services() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                viewport={{ once: true }}
-                className="text-center"
+                viewport={{ once: false, margin: "-100px" }}
+                className="text-center group"
               >
-                <DollarSign className="h-16 w-16 text-primary mx-auto mb-6" />
+                <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/30 transition-colors">
+                  <DollarSign className="h-10 w-10 text-primary" />
+                </div>
                 <h3 className="text-xl font-bold mb-4">Fair Pricing</h3>
-                <p className="text-gray-300">
+                <p className="text-gray-300 leading-relaxed">
                   Transparent, competitive pricing with no hidden fees. We provide detailed 
                   quotes before starting any work.
                 </p>
@@ -382,14 +359,16 @@ export default function Services() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
-                className="text-center"
+                viewport={{ once: false, margin: "-100px" }}
+                className="text-center group"
               >
-                <Award className="h-16 w-16 text-primary mx-auto mb-6" />
-                <h3 className="text-xl font-bold mb-4">Quality Warranty</h3>
-                <p className="text-gray-300">
-                  We stand behind our work with comprehensive warranties on all repairs 
-                  and parts.
+                <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/30 transition-colors">
+                  <Shield className="h-10 w-10 text-primary" />
+                </div>
+                <h3 className="text-xl font-bold mb-4">Quality Workmanship</h3>
+                <p className="text-gray-300 leading-relaxed">
+                  Our experienced technicians use quality parts and proven techniques 
+                  to ensure reliable repairs.
                 </p>
               </motion.div>
             </div>
@@ -398,17 +377,17 @@ export default function Services() {
 
         {/* CTA Section */}
         <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16 text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
             >
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Ready to Get Your Truck Serviced?
               </h2>
-              <p className="text-xl text-muted mb-8 max-w-3xl mx-auto">
+              <p className="text-xl text-muted mb-8 text-center">
                 Contact us today for professional heavy-duty truck repair services. 
                 We're here to help keep your fleet running smoothly.
               </p>

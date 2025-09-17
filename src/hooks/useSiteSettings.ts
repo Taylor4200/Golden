@@ -16,7 +16,7 @@ export function useSiteSettings() {
   const [settings, setSettings] = useState<SiteSettings>({
     siteName: 'Golden Heavy Duty Truck Repair',
     siteDescription: 'Professional heavy-duty truck repair services in Hudson, CO',
-    contactEmail: 'info@goldenheavyduty.com',
+    contactEmail: 'breakdown@goldenheavyduty.com',
     contactPhone: '(303) 304-9993',
     address: '806 Cedar St, Hudson, CO 80642',
     businessHours: 'Mon-Fri: 9AM-9PM, Sat-Sun: 9AM-5PM, 24/7 Emergency',
@@ -33,7 +33,7 @@ export function useSiteSettings() {
         setSettings({
           siteName: settingsData.site_name || 'Golden Heavy Duty Truck Repair',
           siteDescription: settingsData.site_description || 'Professional heavy-duty truck repair services in Hudson, CO',
-          contactEmail: settingsData.contact_email || 'info@goldenheavyduty.com',
+          contactEmail: settingsData.contact_email || 'breakdown@goldenheavyduty.com',
           contactPhone: settingsData.contact_phone || '(303) 304-9993',
           address: settingsData.address || '806 Cedar St, Hudson, CO 80642',
           businessHours: settingsData.business_hours || 'Mon-Fri: 9AM-9PM, Sat-Sun: 9AM-5PM, 24/7 Emergency',

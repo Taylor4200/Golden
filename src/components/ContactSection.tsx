@@ -66,9 +66,9 @@ export default function ContactSection() {
     {
       icon: Mail,
       title: 'Email',
-      details: 'info@goldenheavyduty.com',
+      details: 'breakdown@goldenheavyduty.com',
       description: 'Get a quote or ask questions',
-      action: 'mailto:info@goldenheavyduty.com'
+      action: 'mailto:breakdown@goldenheavyduty.com'
     }
   ];
 
@@ -96,7 +96,7 @@ export default function ContactSection() {
           <h2 className="text-5xl md:text-6xl font-bold text-secondary mb-8">
             Get In <span className="text-primary">Touch</span>
           </h2>
-          <p className="text-2xl text-muted max-w-4xl mx-auto leading-relaxed">
+          <p className="text-2xl text-muted max-w-4xl mx-auto leading-relaxed text-center px-4">
             Ready to get your truck back on the road? Contact us today for 
             professional heavy-duty repair services.
           </p>
@@ -123,7 +123,7 @@ export default function ContactSection() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, margin: "-100px" }}
                   className="card hover:shadow-xl transition-all duration-300"
                 >
                   <div className="flex items-start space-x-4">
@@ -154,7 +154,7 @@ export default function ContactSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
               className="bg-gradient-to-br from-secondary via-gray-800 to-secondary rounded-2xl p-8 text-white relative overflow-hidden"
             >
               {/* Background Pattern */}

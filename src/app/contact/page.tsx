@@ -6,6 +6,7 @@ import ContactSection from '@/components/ContactSection';
 import { motion } from 'framer-motion';
 import { Phone, MapPin, Clock, Mail, MessageCircle } from 'lucide-react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
+import Link from 'next/link';
 
 
 export default function Contact() {
@@ -59,6 +60,7 @@ export default function Contact() {
     'LaSalle, CO'
   ];
 
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -72,10 +74,10 @@ export default function Contact() {
               transition={{ duration: 0.8 }}
               className="text-center"
             >
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center">
                 Contact <span className="text-primary">Us</span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed text-center">
                 Ready to get your truck back on the road? We're here to help with 
                 professional heavy-duty repair services.
               </p>
@@ -88,18 +90,13 @@ export default function Contact() {
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
               className="text-center mb-16"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Get In Touch
               </h2>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
-                Choose the most convenient way to reach us. We're here to help 
-                with all your heavy-duty truck repair needs.
-              </p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -107,9 +104,8 @@ export default function Contact() {
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
                   className="card text-center group hover:shadow-xl transition-all duration-300"
                 >
                   <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 transition-colors">
@@ -138,7 +134,7 @@ export default function Contact() {
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, margin: "-100px" }}
               >
                 <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                   Business <span className="text-primary">Hours</span>
@@ -146,15 +142,15 @@ export default function Contact() {
                 <div className="space-y-6">
                   <div className="flex items-center justify-between py-4 border-b border-border">
                     <span className="font-semibold text-secondary">Monday - Friday</span>
-                    <span className="text-muted">7:00 AM - 6:00 PM</span>
+                    <span className="text-muted">9:00 AM - 9:00 PM</span>
                   </div>
                   <div className="flex items-center justify-between py-4 border-b border-border">
                     <span className="font-semibold text-secondary">Saturday</span>
-                    <span className="text-muted">8:00 AM - 4:00 PM</span>
+                    <span className="text-muted">9:00 AM - 5:00 PM</span>
                   </div>
                   <div className="flex items-center justify-between py-4 border-b border-border">
                     <span className="font-semibold text-secondary">Sunday</span>
-                    <span className="text-muted">Emergency Only</span>
+                    <span className="text-muted">9:00 AM - 5:00 PM</span>
                   </div>
                   <div className="bg-primary/10 rounded-lg p-4 mt-6">
                     <div className="flex items-center space-x-2 mb-2">
@@ -172,21 +168,33 @@ export default function Contact() {
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, margin: "-100px" }}
                 className="bg-secondary rounded-2xl p-8 text-white"
               >
-                <h3 className="text-2xl font-bold mb-6">Service Areas</h3>
+                <h3 className="text-2xl font-bold mb-6">Mobile Service Areas</h3>
                 <p className="text-gray-300 mb-6">
-                  We proudly serve Northern Colorado and surrounding areas. 
-                  Emergency towing available throughout the region.
+                  We provide mobile service within a 100-mile radius of Denver in all directions. 
+                  Emergency towing and roadside assistance available throughout the region.
                 </p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 mb-6">
                   {serviceAreas.map((area, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-primary rounded-full" />
                       <span className="text-sm text-gray-300">{area}</span>
                     </div>
                   ))}
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-gray-300 mb-3">
+                    Plus 150+ more locations within 100 miles of Denver
+                  </p>
+                  <Link 
+                    href="/service-areas"
+                    className="inline-flex items-center space-x-2 bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    <MapPin className="h-4 w-4" />
+                    <span>View All Service Areas</span>
+                  </Link>
                 </div>
                 <div className="mt-6 pt-6 border-t border-gray-700">
                   <p className="text-sm text-gray-300">
@@ -203,17 +211,17 @@ export default function Contact() {
 
         {/* Emergency Contact */}
         <section className="py-20 bg-red-600 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16 text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">
                 Emergency Service Available 24/7
               </h2>
-              <p className="text-xl text-red-100 mb-8 max-w-3xl mx-auto">
+              <p className="text-xl text-red-100 mb-8 text-center">
                 Truck broke down? Need emergency repair or towing? We're here to help 
                 when you need us most.
               </p>

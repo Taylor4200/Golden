@@ -190,13 +190,13 @@ export default function Chatbot() {
   };
 
   const handleAppointment = () => {
-    setCurrentStep('appointment_name');
-    simulateTyping("Great! Let's get your repair appointment scheduled. What's your name?", 800);
+    setCurrentStep('appointment_form');
+    addMessage("Great! Let's get your repair appointment scheduled. Please fill out the form below:", true, 'form');
   };
 
   const handleQuote = () => {
-    setCurrentStep('quote_name');
-    simulateTyping("I'll help you get a free quote. What's your name?", 800);
+    setCurrentStep('quote_form');
+    addMessage("I'll help you get a free quote. Please fill out the form below:", true, 'form');
   };
 
   const handleFAQ = () => {
@@ -210,25 +210,12 @@ export default function Chatbot() {
   };
 
   const handleFormSubmit = () => {
-    if (currentStep === 'appointment_name' && leadData.name) {
-      setCurrentStep('appointment_phone');
-      simulateTyping(`Thanks ${leadData.name}! What's your phone number?`, 600);
-    } else if (currentStep === 'appointment_phone' && leadData.phone) {
-      setCurrentStep('appointment_truck');
-      simulateTyping("What's your truck make and model?", 600);
-    } else if (currentStep === 'appointment_truck' && leadData.truckMake) {
-      setCurrentStep('appointment_issue');
-      simulateTyping("What's the issue you're experiencing?", 600);
-    } else if (currentStep === 'appointment_issue' && leadData.issue) {
-      setCurrentStep('appointment_urgency');
-      simulateTyping("How urgent is this repair?", 600);
-      addMessage("", true, 'options', [
-        { id: 'emergency_urgency', text: 'Emergency - Need help now', icon: <AlertTriangle className="h-4 w-4" />, action: 'emergency_urgency' },
-        { id: 'urgent_urgency', text: 'Urgent - Within 24 hours', icon: <Clock className="h-4 w-4" />, action: 'urgent_urgency' },
-        { id: 'routine_urgency', text: 'Routine - Can wait a few days', icon: <CheckCircle className="h-4 w-4" />, action: 'routine_urgency' }
-      ]);
-    } else if (currentStep === 'appointment_urgency' && leadData.urgency) {
-      completeAppointment();
+    if (currentStep === 'appointment_form' || currentStep === 'quote_form') {
+      if (currentStep === 'appointment_form') {
+        completeAppointment();
+      } else {
+        completeQuote();
+      }
     }
   };
 
@@ -270,7 +257,38 @@ export default function Chatbot() {
     setLeadData({});
   };
 
-  const handleInputSubmit = (e: React.FormEvent) => {
+  const getIntelligentResponse = async (userMessage: string): Promise<{ response: string; shouldShowForm: boolean }> => {
+    try {
+      const response = await fetch('/api/chatbot-ai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          context: 'truck_repair'
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          response: data.response,
+          shouldShowForm: data.shouldShowForm
+        };
+      }
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+    }
+
+    // Fallback response if API fails
+    return {
+      response: "I understand you need help. Let me gather some information so I can connect you with the right person on our team.",
+      shouldShowForm: true
+    };
+  };
+
+  const handleInputSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const input = inputRef.current;
     if (!input || !input.value.trim()) return;
@@ -293,8 +311,31 @@ export default function Chatbot() {
       setLeadData(prev => ({ ...prev, issue: userMessage }));
       setTimeout(() => handleFormSubmit(), 500);
     } else {
-      // General conversation fallback
-      simulateTyping("I understand you need help. Let me connect you with our team. What's your name and phone number?", 1000);
+      // Show typing indicator
+      setIsTyping(true);
+      
+      try {
+        // Get intelligent response from AI
+        const aiResponse = await getIntelligentResponse(userMessage);
+        
+        // Hide typing indicator and show response
+        setTimeout(() => {
+          setIsTyping(false);
+          addMessage(aiResponse.response, true);
+          
+          // Show form if AI suggests it
+          if (aiResponse.shouldShowForm) {
+            setTimeout(() => {
+              setCurrentStep('appointment_form');
+              addMessage("Please fill out this form so I can get you the help you need:", true, 'form');
+            }, 1500);
+          }
+        }, 1000);
+      } catch (error) {
+        console.error('Error getting AI response:', error);
+        setIsTyping(false);
+        simulateTyping("I understand you need help. Let me gather some information so I can connect you with the right person on our team.", 1000);
+      }
     }
   };
 
@@ -303,7 +344,7 @@ export default function Chatbot() {
     if (messages.length === 0) {
       setTimeout(() => {
         addMessage(
-          `🚛 **Welcome to Golden Heavy Duty Truck Repair!**\n\nWe're here to help with your rig 24/7. How can we assist you today?`,
+          `🚛 **Welcome to Golden Heavy Duty Truck Repair!**\n\nI'm here to help with your truck repair needs 24/7. Whether you need emergency service, want to schedule an appointment, or have questions about our services, I'm here to assist you.\n\nWhat can I help you with today?`,
           true,
           'options',
           quickOptions
@@ -433,6 +474,117 @@ export default function Chatbot() {
                               <span className="text-sm">{option.text}</span>
                             </button>
                           ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {message.type === 'form' && (
+                      <div className="space-y-2">
+                        <p className="text-sm mb-3">{message.text}</p>
+                        <div className="bg-gray-50 p-3 rounded-lg space-y-3">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Name *</label>
+                            <input
+                              type="text"
+                              value={leadData.name || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, name: e.target.value }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                              placeholder="Your full name"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Phone Number *</label>
+                            <input
+                              type="tel"
+                              value={leadData.phone || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, phone: e.target.value }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                              placeholder="(303) 555-0123"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
+                            <input
+                              type="email"
+                              value={leadData.email || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, email: e.target.value }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                              placeholder="your@email.com"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Truck Make & Model *</label>
+                            <input
+                              type="text"
+                              value={`${leadData.truckMake || ''} ${leadData.truckModel || ''}`.trim()}
+                              onChange={(e) => {
+                                const [make, ...modelParts] = e.target.value.split(' ');
+                                setLeadData(prev => ({ 
+                                  ...prev, 
+                                  truckMake: make || '', 
+                                  truckModel: modelParts.join(' ') || '' 
+                                }));
+                              }}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                              placeholder="Freightliner Cascadia"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Issue Description *</label>
+                            <textarea
+                              value={leadData.issue || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, issue: e.target.value }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                              placeholder="Describe the problem you're experiencing..."
+                              rows={3}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">Urgency *</label>
+                            <select
+                              value={leadData.urgency || ''}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, urgency: e.target.value as 'emergency' | 'urgent' | 'routine' }))}
+                              className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                            >
+                              <option value="">Select urgency level</option>
+                              <option value="emergency">Emergency - Need help now</option>
+                              <option value="urgent">Urgent - Within 24 hours</option>
+                              <option value="routine">Routine - Can wait a few days</option>
+                            </select>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              id="isFleet"
+                              checked={leadData.isFleet || false}
+                              onChange={(e) => setLeadData(prev => ({ ...prev, isFleet: e.target.checked }))}
+                              className="rounded"
+                            />
+                            <label htmlFor="isFleet" className="text-xs text-gray-700">This is for a fleet vehicle</label>
+                          </div>
+                          {leadData.isFleet && (
+                            <div>
+                              <label className="block text-xs font-medium text-gray-700 mb-1">Fleet Size</label>
+                              <select
+                                value={leadData.fleetSize || ''}
+                                onChange={(e) => setLeadData(prev => ({ ...prev, fleetSize: e.target.value }))}
+                                className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                              >
+                                <option value="">Select fleet size</option>
+                                <option value="1-5">1-5 vehicles</option>
+                                <option value="6-20">6-20 vehicles</option>
+                                <option value="21-50">21-50 vehicles</option>
+                                <option value="50+">50+ vehicles</option>
+                              </select>
+                            </div>
+                          )}
+                          <button
+                            onClick={handleFormSubmit}
+                            disabled={!leadData.name || !leadData.phone || !leadData.truckMake || !leadData.issue || !leadData.urgency}
+                            className="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                          >
+                            {currentStep === 'appointment_form' ? 'Schedule Appointment' : 'Get Free Quote'}
+                          </button>
                         </div>
                       </div>
                     )}

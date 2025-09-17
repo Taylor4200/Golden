@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Phone, MapPin, Clock, Mail, Facebook, Twitter, Instagram } from 'lucide-react';
+import { Phone, MapPin, Clock, Mail, Instagram } from 'lucide-react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export default function Footer() {
@@ -22,10 +22,8 @@ export default function Footer() {
     { name: 'Home', href: '/' },
     { name: 'Services', href: '/services' },
     { name: 'About Us', href: '/about' },
-    { name: 'Gallery', href: '/gallery' },
-    { name: 'Blog', href: '/blog' },
     { name: 'Contact', href: '/contact' },
-    { name: 'FAQ', href: '/faq' },
+    { name: 'Service Areas', href: '/service-areas' },
   ];
 
   return (
@@ -47,13 +45,12 @@ export default function Footer() {
               {settings.siteDescription}
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-primary transition-colors">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-primary transition-colors">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-primary transition-colors">
+              <a 
+                href="https://www.instagram.com/goldenheavyduty/?hl=en" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-300 hover:text-primary transition-colors"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
             </div>
@@ -152,10 +149,10 @@ export default function Footer() {
               © {currentYear} Golden Heavy Duty. All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm">
-              <Link href="/privacy" className="text-gray-300 hover:text-primary transition-colors">
+              <Link href="/privacy-policy" className="text-gray-300 hover:text-primary transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-gray-300 hover:text-primary transition-colors">
+              <Link href="/terms-of-service" className="text-gray-300 hover:text-primary transition-colors">
                 Terms of Service
               </Link>
             </div>

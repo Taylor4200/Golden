@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
+import GoogleReviews from './GoogleReviews';
 
 export default function Testimonials() {
   const testimonials = [
@@ -90,14 +91,14 @@ export default function Testimonials() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
           className="text-center mb-32"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
             className="inline-block mb-6"
           >
             <span className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide">
@@ -107,66 +108,25 @@ export default function Testimonials() {
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-secondary mb-8">
             What Our <span className="gradient-text">Customers Say</span>
           </h2>
-          <p className="text-xl md:text-2xl text-muted max-w-5xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted max-w-5xl mx-auto leading-relaxed text-center px-4">
             Don't just take our word for it. Here's what fleet owners and drivers 
             across Northern Colorado have to say about our service.
           </p>
         </motion.div>
 
-        {/* Testimonials Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
-        >
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className="card group hover:shadow-xl transition-all duration-300 relative"
-            >
-              {/* Quote Icon */}
-              <div className="absolute top-6 right-6 opacity-10">
-                <Quote className="h-12 w-12 text-primary" />
-              </div>
-
-              {/* Rating */}
-              <div className="flex items-center space-x-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-              </div>
-
-              {/* Content */}
-              <blockquote className="text-muted leading-relaxed mb-6 relative z-10">
-                "{testimonial.content}"
-              </blockquote>
-
-              {/* Author */}
-              <div className="flex items-center space-x-4">
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <h4 className="font-semibold text-secondary">{testimonial.name}</h4>
-                  <p className="text-sm text-muted">{testimonial.role}</p>
-                  <p className="text-sm text-primary font-medium">{testimonial.company}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+        {/* Google Reviews */}
+        <GoogleReviews 
+          placeId="ChIJK3AtkqE_bIcRhNNvo_WtrJg" 
+          apiKey={process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY}
+          maxReviews={12}
+        />
 
         {/* Stats Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
+              viewport={{ once: false, margin: "-100px" }}
           className="mt-20 bg-secondary rounded-2xl p-8 md:p-12 text-white"
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">

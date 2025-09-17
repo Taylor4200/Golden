@@ -68,7 +68,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-xl md:text-2xl text-gray-200 max-w-5xl mx-auto leading-relaxed text-center"
+              className="text-xl md:text-2xl text-gray-200 max-w-5xl mx-auto leading-relaxed text-center px-4"
             >
               Professional heavy-duty truck & trailer repair in Hudson, CO. Certified mechanics, fast turnaround, 
               and 24/7 mobile emergency service to keep your fleet rolling.

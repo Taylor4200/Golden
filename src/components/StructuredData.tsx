@@ -8,7 +8,7 @@ export default function StructuredData() {
     "logo": "https://goldenheavyduty.com/logo.png",
     "image": "https://goldenheavyduty.com/hero-image.jpg",
     "telephone": "+13033049993",
-    "email": "info@goldenheavyduty.com",
+    "email": "breakdown@goldenheavyduty.com",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "806 Cedar St",
@@ -178,7 +178,7 @@ export default function StructuredData() {
     "description": "Heavy-duty truck repair and maintenance services in Hudson, Colorado",
     "url": "https://goldenheavyduty.com",
     "telephone": "+13033049993",
-    "email": "info@goldenheavyduty.com",
+    "email": "breakdown@goldenheavyduty.com",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "806 Cedar St",

@@ -23,7 +23,6 @@ export default function Header() {
 
   const navigation = [
     { name: 'About', href: '/about' },
-    { name: 'Gallery', href: '/gallery' },
     { name: 'Contact', href: '/contact' },
   ];
 
@@ -38,7 +37,7 @@ export default function Header() {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-white'
     }`}>
       {/* Top bar with emergency contact */}
@@ -68,15 +67,15 @@ export default function Header() {
       {/* Main navigation */}
       <nav className="bg-white border-b border-border">
         <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <Image
                 src="/Logo.png"
                 alt="Golden Heavy Duty Repair"
-                width={200}
-                height={80}
-                className="h-12 w-auto"
+                width={300}
+                height={120}
+                className="h-16 w-auto"
                 priority
               />
             </Link>

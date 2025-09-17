@@ -1,11 +1,5 @@
 // SMS and Email notification utilities
-import { createClient } from '@supabase/supabase-js';
-
-// Create client-side Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { supabase } from './supabase';
 
 export interface LeadNotification {
   type: 'emergency' | 'appointment' | 'quote' | 'general';
@@ -50,7 +44,7 @@ export async function sendEmailNotification(lead: LeadNotification) {
     const { data, error } = await supabase.functions.invoke('send-email-notification', {
       body: {
         lead,
-        businessEmail: 'info@goldenheavyduty.com' // Use hardcoded business email for now
+        businessEmail: 'breakdown@goldenheavyduty.com' // Use hardcoded business email for now
       }
     });
 

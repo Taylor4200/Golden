@@ -228,3 +228,58 @@ h1, h2, h3, h4, h5, h6 {
 .card-premium {
   @apply bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105;
 }
+
+/* Force text centering for all text elements with max-w and mx-auto */
+p.text-center,
+.text-center p {
+  text-align: center !important;
+}
+
+/* Ensure all text with max-w and mx-auto is centered */
+.max-w-3xl.mx-auto,
+.max-w-4xl.mx-auto,
+.max-w-5xl.mx-auto,
+p.max-w-3xl.mx-auto,
+p.max-w-4xl.mx-auto,
+p.max-w-5xl.mx-auto {
+  text-align: center !important;
+}
+
+/* Override any text-left classes that might be interfering */
+p.max-w-3xl.mx-auto,
+p.max-w-4xl.mx-auto,
+p.max-w-5xl.mx-auto {
+  text-align: center !important;
+}
+
+/* Force centering for all paragraph elements with specific classes */
+p.text-muted,
+p.text-gray-300,
+p.text-muted.text-center,
+p.text-gray-300.text-center {
+  text-align: center !important;
+}
+
+/* Additional centering rules for better alignment */
+.text-center p,
+p.text-center {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Ensure all text with max-width and auto margins is centered */
+.max-w-3xl.mx-auto,
+.max-w-4xl.mx-auto,
+.max-w-5xl.mx-auto {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Force centering for all text elements in motion divs */
+.motion p,
+.motion div p {
+  text-align: center !important;
+}
+

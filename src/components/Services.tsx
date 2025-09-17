@@ -5,7 +5,6 @@ import {
   Wrench, 
   Cog, 
   Shield, 
-  Clock, 
   Truck, 
   Settings, 
   AlertTriangle, 
@@ -26,48 +25,42 @@ export default function Services() {
       title: 'Engine Repair',
       description: 'Complete engine diagnostics, rebuilds, and maintenance for all heavy-duty truck engines.',
       features: ['Engine Diagnostics', 'Rebuilds & Overhauls', 'Preventive Maintenance', 'Performance Tuning'],
-      priceRange: 'Call for quote',
-      duration: 'Varies'
+      priceRange: 'Call for quote'
     },
     {
       icon: Cog,
       title: 'Transmission Service',
       description: 'Expert transmission repair, rebuilds, and maintenance to keep your truck shifting smoothly.',
       features: ['Transmission Rebuilds', 'Clutch Service', 'Fluid Changes', 'Diagnostic Testing'],
-      priceRange: 'Call for quote',
-      duration: 'Varies'
+      priceRange: 'Call for quote'
     },
     {
       icon: Shield,
       title: 'Brake Systems',
       description: 'Comprehensive brake system service, repair, and maintenance for maximum safety.',
       features: ['Brake Pad Replacement', 'Rotor Service', 'Air Brake Systems', 'ABS Diagnostics'],
-      priceRange: 'Call for quote',
-      duration: 'Varies'
+      priceRange: 'Call for quote'
     },
     {
       icon: Settings,
       title: 'Diagnostics',
       description: 'State-of-the-art diagnostic equipment to quickly identify and resolve issues.',
       features: ['Computer Diagnostics', 'Engine Scanning', 'Electrical Testing', 'Performance Analysis'],
-      priceRange: 'Call for quote',
-      duration: 'Varies'
+      priceRange: 'Call for quote'
     },
     {
       icon: AlertTriangle,
       title: 'Emergency Service',
       description: '24/7 emergency roadside assistance and towing for when you need help most.',
       features: ['Roadside Assistance', 'Emergency Towing', '24/7 Availability', 'Rapid Response'],
-      priceRange: 'Call for quote',
-      duration: 'Varies'
+      priceRange: 'Call for quote'
     },
     {
       icon: Users,
       title: 'Fleet Maintenance',
       description: 'Comprehensive fleet maintenance programs to keep your entire operation running.',
       features: ['Scheduled Maintenance', 'Fleet Inspections', 'Cost Management', 'Reporting'],
-      priceRange: 'Call for quote',
-      duration: 'Varies'
+      priceRange: 'Call for quote'
     }
   ];
 
@@ -126,7 +119,7 @@ export default function Services() {
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-secondary mb-8">
             Professional <span className="gradient-text">Heavy-Duty</span> Services
           </h2>
-          <p className="text-xl md:text-2xl text-muted max-w-5xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted max-w-5xl mx-auto leading-relaxed text-center px-4">
             From routine maintenance to major repairs, we provide comprehensive 
             heavy-duty truck services to keep your fleet running at peak performance.
           </p>
@@ -169,39 +162,31 @@ export default function Services() {
                   <h3 className="text-2xl font-bold text-secondary group-hover:text-primary transition-colors duration-300">
                     {service.name || service.title}
                   </h3>
-                  <p className="text-muted leading-relaxed text-base">
+                  <p className="text-muted leading-relaxed text-base text-left">
                     {service.shortDescription || service.description}
                   </p>
 
                   {/* Enhanced Service Details */}
-                  <div className="flex items-center justify-between text-sm text-gray-600 py-3 border-t border-gray-100 bg-gray-50/50 rounded-lg px-3 -mx-3">
-                    {service.priceRange && (
+                  {service.priceRange && (
+                    <div className="flex items-center justify-center text-sm text-gray-600 py-3 border-t border-gray-100 bg-gray-50/50 rounded-lg px-3 -mx-3">
                       <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                           <DollarSign className="h-4 w-4 text-primary" />
                         </div>
                         <span className="font-semibold text-gray-800">{service.priceRange}</span>
                       </div>
-                    )}
-                    {service.duration && (
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                          <Clock className="h-4 w-4 text-primary" />
-                        </div>
-                        <span className="font-medium text-gray-700">{service.duration}</span>
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   {/* Enhanced Features */}
-                  <ul className="space-y-3">
+                  <ul className="space-y-3 text-left">
                     {(service.features || []).slice(0, 4).map((feature, featureIndex) => (
                       <motion.li 
                         key={featureIndex} 
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.3, delay: featureIndex * 0.1 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false, margin: "-100px" }}
                         className="flex items-center space-x-3 text-sm text-muted group-hover:text-gray-700 transition-colors"
                       >
                         <div className="w-2 h-2 bg-gradient-to-r from-primary to-primary-dark rounded-full flex-shrink-0" />
@@ -209,7 +194,7 @@ export default function Services() {
                       </motion.li>
                     ))}
                     {service.features && service.features.length > 4 && (
-                      <li className="text-xs text-primary font-semibold bg-primary/10 px-2 py-1 rounded-full inline-block">
+                      <li className="text-xs text-primary font-semibold bg-primary/10 px-2 py-1 rounded-full inline-block text-left">
                         +{service.features.length - 4} more features
                       </li>
                     )}
@@ -254,7 +239,7 @@ export default function Services() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, margin: "-100px" }}
                 className="text-4xl md:text-5xl font-bold mb-6"
               >
                 Need Service? <span className="gradient-text">We're Here to Help</span>
@@ -263,8 +248,8 @@ export default function Services() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-                className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed"
+                viewport={{ once: false, margin: "-100px" }}
+                className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed text-center px-4"
               >
                 Don't let downtime cost you money. Get professional heavy-duty truck repair 
                 services when you need them most.
@@ -273,7 +258,7 @@ export default function Services() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, margin: "-100px" }}
                 className="flex flex-col sm:flex-row items-center justify-center gap-6"
               >
                 <motion.a
