@@ -1,5 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Format conversation history for Cohere API
+function formatConversationHistory(history: any[]): any[] {
+  if (!history || !Array.isArray(history)) return [];
+  
+  return history.map(msg => {
+    // Convert from our format to Cohere format
+    if (msg.type === 'user') {
+      return { role: 'USER', message: msg.text || msg.message || '' };
+    } else if (msg.type === 'bot' || msg.type === 'assistant') {
+      return { role: 'CHATBOT', message: msg.text || msg.message || '' };
+    }
+    // Fallback for unknown formats
+    return { role: 'USER', message: String(msg) };
+  }).filter(msg => msg.message && msg.message.trim().length > 0);
+}
+
+// Sanitize AI responses to prevent weird outputs
+function sanitizeAIResponse(response: string): string {
+  if (!response) return '';
+  
+  // Remove any role prefixes that might leak through
+  let sanitized = response.replace(/^(USER|CHATBOT|ASSISTANT):\s*/i, '');
+  
+  // Limit to reasonable length (prevent extremely long responses)
+  if (sanitized.length > 500) {
+    sanitized = sanitized.substring(0, 500) + '...';
+  }
+  
+  // Remove excessive newlines and whitespace
+  sanitized = sanitized.replace(/\n{3,}/g, '\n\n');
+  sanitized = sanitized.replace(/\s{3,}/g, ' ');
+  
+  // Ensure it doesn't start with weird characters
+  sanitized = sanitized.replace(/^[^\w\s]*/, '');
+  
+  return sanitized.trim();
+}
+
 // Free AI fallback using Cohere (more reliable than Hugging Face)
 async function getAIFallbackResponse(userMessage: string, conversationHistory?: any[]): Promise<string> {
   try {
@@ -19,7 +57,7 @@ async function getAIFallbackResponse(userMessage: string, conversationHistory?: 
       body: JSON.stringify({
         model: process.env.COHERE_MODEL || 'command-r7b-12-2024',
         message: userMessage,
-        chat_history: conversationHistory || [],
+        chat_history: formatConversationHistory(conversationHistory || []),
         system_prompt: `You are the AI chatbot for Golden Heavy Duty Truck Repair in Hudson, CO. You are NOT Command or any other AI model. You are specifically designed to help customers with truck repair questions, scheduling appointments, getting quotes, and emergency assistance. 
 
 Your identity: You are Golden Heavy Duty's AI assistant, created specifically for this truck repair business. You know about truck repair, our services, and can help customers get the assistance they need.
@@ -32,34 +70,45 @@ Business Information:
 Always be friendly and professional. Keep responses concise and helpful. When asked about yourself, say you are the AI assistant for Golden Heavy Duty Truck Repair. When asked for phone number, contact info, or how to reach us, provide our phone number (303) 304-9993.
 
 IMPORTANT: Only suggest forms, appointments, or quotes when the user actually needs service or asks for them. For general questions, just answer conversationally. Don't push forms on users who are just asking questions or making small talk.`,
-        max_tokens: 200,
+        max_tokens: 350,
         temperature: 0.7
       }),
     });
 
     if (!response.ok) {
-      console.log(`Cohere API error: ${response.status} ${response.statusText}`);
-      const errorText = await response.text();
-      console.log('Error details:', errorText);
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Cohere API error: ${response.status} ${response.statusText}`);
+        const errorText = await response.text();
+        console.log('Error details:', errorText);
+      } else {
+        console.error(`Cohere API error: ${response.status} ${response.statusText}`);
+      }
       return "I'm an AI assistant for Golden Heavy Duty Truck Repair. I can help with truck repair questions, scheduling, and emergency assistance. What can I help you with today?";
     }
 
-    const data = await response.json();
-    console.log('Cohere API response:', data);
-    
-    if (data && data.text) {
-      const aiResponse = data.text.trim();
-      
-      if (aiResponse && aiResponse.length > 10) {
-        return aiResponse;
-      }
-    }
+        const data = await response.json();
+        // Only log in development, sanitize for production
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Cohere API response received');
+        }
+        
+        if (data && data.text) {
+          const aiResponse = sanitizeAIResponse(data.text.trim());
+          
+          if (aiResponse && aiResponse.length > 10) {
+            return aiResponse;
+          }
+        }
     
     // Fallback if AI response is too short or invalid
     return "I'm an AI assistant for Golden Heavy Duty Truck Repair. I can help with truck repair questions, scheduling, and emergency assistance. What can I help you with today?";
     
   } catch (error) {
-    console.error('AI fallback error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('AI fallback error:', error);
+    } else {
+      console.error('AI fallback error occurred');
+    }
     return "I'm an AI assistant for Golden Heavy Duty Truck Repair. I can help with truck repair questions, scheduling, and emergency assistance. What can I help you with today?";
   }
 }
@@ -155,35 +204,39 @@ export async function POST(request: NextRequest) {
     const messageLower = message.toLowerCase();
     let category = 'default';
     
-    // Enhanced fuzzy intent detection
-    const intentPatterns = {
-      greeting: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings'],
-      help: ['help', 'need help', 'assistance', 'problem', 'issue', 'broken', 'fix', 'repair', 'trouble', 'malfunction'],
-      emergency: ['emergency', 'urgent', 'stuck', 'broken down', 'stranded', 'asap', 'immediately', 'help me', 'need help now', 'critical', 'desperate'],
-      engine: ['engine', 'motor', 'won\'t start', 'cranks', 'stalls', 'overheating', 'smoke', 'knocking', 'rough idle'],
-      transmission: ['transmission', 'gearbox', 'shifting', 'clutch', 'automatic', 'manual', 'gear', 'stuck in gear'],
-      brake: ['brake', 'brakes', 'stopping', 'pedal', 'squeaking', 'grinding', 'soft pedal', 'pulling'],
-      tire: ['tire', 'tyre', 'flat', 'blowout', 'tread', 'alignment', 'balancing', 'pressure'],
-      electrical: ['electrical', 'wiring', 'battery', 'alternator', 'starter', 'lights', 'fuse', 'short circuit'],
-      quote: ['price', 'cost', 'quote', 'estimate', 'how much', 'pricing', 'rates'],
-      appointment: ['appointment', 'schedule', 'book', 'reserve', 'time slot', 'availability'],
-      location: ['where', 'location', 'address', 'directions', 'find', 'located'],
-      hours: ['hours', 'open', 'closed', 'business hours', 'operating hours', 'when open'],
-      phone: ['phone', 'number', 'call', 'contact', 'telephone', 'reach', 'get in touch'],
-      fleet: ['fleet', 'multiple', 'company', 'business', 'commercial', 'fleet management']
-    };
+        // Enhanced fuzzy intent detection with synonyms
+        const intentPatterns = {
+          greeting: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings', 'whats up', 'how are you', 'how are you doing', 'how is it going', 'how goes it'],
+          help: ['help', 'need help', 'assistance', 'problem', 'issue', 'broken', 'fix', 'repair', 'trouble', 'malfunction'],
+          emergency: ['emergency', 'urgent', 'stuck', 'broken down', 'stranded', 'asap', 'immediately', 'help me', 'need help now', 'critical', 'desperate'],
+          engine: ['engine', 'motor', 'wont start', 'won\'t start', 'wont turn over', 'won\'t turn over', 'cranks', 'stalls', 'overheating', 'smoke', 'knocking', 'rough idle', 'engine wont start', 'engine won\'t start'],
+          transmission: ['transmission', 'gearbox', 'shifting', 'clutch', 'automatic', 'manual', 'gear', 'stuck in gear', 'wont shift', 'won\'t shift', 'transmission stuck'],
+          brake: ['brake', 'brakes', 'stopping', 'pedal', 'squeaking', 'grinding', 'soft pedal', 'pulling', 'brake pedal', 'brakes squeaking'],
+          tire: ['tire', 'tyre', 'flat', 'blowout', 'tread', 'alignment', 'balancing', 'pressure', 'flat tire', 'tire pressure'],
+          electrical: ['electrical', 'wiring', 'battery', 'alternator', 'starter', 'lights', 'fuse', 'short circuit', 'electrical problem', 'battery dead'],
+          quote: ['price', 'cost', 'quote', 'estimate', 'how much', 'pricing', 'rates', 'what does it cost', 'how much does it cost'],
+          appointment: ['appointment', 'schedule', 'book', 'reserve', 'time slot', 'availability', 'schedule appointment', 'book appointment'],
+          location: ['where', 'location', 'address', 'directions', 'find', 'located', 'where are you', 'where is your shop'],
+          hours: ['hours', 'open', 'closed', 'business hours', 'operating hours', 'when open', 'what time', 'when do you close', 'when do you open'],
+          phone: ['phone', 'number', 'call', 'contact', 'telephone', 'reach', 'get in touch', 'phone number', 'whats your number', 'what\'s your number'],
+          fleet: ['fleet', 'multiple', 'company', 'business', 'commercial', 'fleet management', 'fleet service', 'multiple trucks'],
+          general: ['what model', 'what are you', 'who are you', 'tell me about', 'whats up', 'how are you', 'how is it going', 'what do you do', 'what can you do']
+        };
 
-    // Check for fuzzy matches with word boundaries to avoid false positives
-    for (const [intent, patterns] of Object.entries(intentPatterns)) {
-      if (patterns.some(pattern => {
-        // Use word boundaries for exact word matches
-        const regex = new RegExp(`\\b${pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
-        return regex.test(messageLower);
-      })) {
-        category = intent;
-        break;
-      }
-    }
+        // Check for fuzzy matches with word boundaries to avoid false positives
+        for (const [intent, patterns] of Object.entries(intentPatterns)) {
+          if (patterns.some(pattern => {
+            // Handle multi-word phrases with flexible whitespace and escape special characters
+            const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            // Allow flexible whitespace for multi-word patterns
+            const flexiblePattern = escapedPattern.replace(/\s+/g, '\\s+');
+            const regex = new RegExp(`\\b${flexiblePattern}\\b`, 'i');
+            return regex.test(messageLower);
+          })) {
+            category = intent;
+            break;
+          }
+        }
 
     // Hybrid system: Use pre-written responses for critical intents, AI for others
     const criticalIntents = ['emergency', 'location', 'hours', 'phone', 'quote', 'appointment'];
@@ -203,17 +256,16 @@ export async function POST(request: NextRequest) {
       // Smart form detection - only show form if user actually needs service
       const serviceKeywords = ['appointment', 'quote', 'schedule', 'book', 'service', 'repair', 'fix', 'help me', 'need help', 'broken', 'issue', 'problem', 'engine', 'transmission', 'brake', 'tire', 'electrical'];
       const hasServiceKeywords = serviceKeywords.some(keyword => {
-        const regex = new RegExp(`\\b${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+        // Handle multi-word phrases with flexible whitespace
+        const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const flexibleKeyword = escapedKeyword.replace(/\s+/g, '\\s+');
+        const regex = new RegExp(`\\b${flexibleKeyword}\\b`, 'i');
         return regex.test(message.toLowerCase());
       });
       const aiSuggestsForm = aiResponse.toLowerCase().includes('form') || aiResponse.toLowerCase().includes('appointment') || aiResponse.toLowerCase().includes('quote');
       
       // Only show form if user is asking for actual service, not general questions
-      const isGeneralQuestion = message.toLowerCase().includes('what model') || 
-                               message.toLowerCase().includes('how are you') || 
-                               message.toLowerCase().includes('who are you') ||
-                               message.toLowerCase().includes('what are you') ||
-                               message.toLowerCase().includes('tell me about');
+      const isGeneralQuestion = category === 'general' || category === 'greeting';
       
       // Combine both user intent and AI suggestion for form detection
       shouldShowForm = (hasServiceKeywords || aiSuggestsForm) && !isGeneralQuestion;
