@@ -72,15 +72,6 @@ export default function ContactSection() {
     }
   ];
 
-  const services = [
-    'Engine Repair',
-    'Transmission Service',
-    'Brake Systems',
-    'Diagnostics',
-    'Emergency Service',
-    'Fleet Maintenance',
-    'Other'
-  ];
 
   return (
     <section className="py-40 bg-gradient-to-br from-gray-50 via-white to-gray-100 relative overflow-hidden">
@@ -261,20 +252,15 @@ export default function ContactSection() {
                   <label htmlFor="service" className="block text-sm font-medium text-secondary mb-2">
                     Service Needed
                   </label>
-                  <select
+                  <input
+                    type="text"
                     id="service"
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                  >
-                    <option value="">Select a service</option>
-                    {services.map((service) => (
-                      <option key={service} value={service}>
-                        {service}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="e.g., Engine repair, Transmission service, etc."
+                  />
                 </div>
 
                 <div>

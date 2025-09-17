@@ -15,12 +15,7 @@ export default function PrivacyPolicy() {
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-secondary to-gray-900 text-white">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center"
-            >
+            <div className="text-center">
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 Privacy <span className="text-primary">Policy</span>
               </h1>
@@ -30,7 +25,7 @@ export default function PrivacyPolicy() {
               <p className="text-sm text-gray-400 mt-4">
                 Last updated: January 2025
               </p>
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -38,13 +33,7 @@ export default function PrivacyPolicy() {
         <section className="py-20 bg-white">
           <div className="max-w-4xl mx-auto px-8 sm:px-12 lg:px-16">
             <div className="prose prose-lg max-w-none">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: false, margin: "-100px" }}
-                className="space-y-8"
-              >
+              <div className="space-y-8">
                 <div>
                   <h2 className="text-2xl font-bold text-secondary mb-4">Information We Collect</h2>
                   <p className="text-muted leading-relaxed mb-4">
@@ -142,7 +131,7 @@ export default function PrivacyPolicy() {
                     by posting the new Privacy Policy on this page and updating the "Last updated" date.
                   </p>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>

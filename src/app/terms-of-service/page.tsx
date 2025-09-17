@@ -33,13 +33,7 @@ export default function TermsOfService() {
         <section className="py-20 bg-white">
           <div className="max-w-4xl mx-auto px-8 sm:px-12 lg:px-16">
             <div className="prose prose-lg max-w-none">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: false, margin: "-100px" }}
-                className="space-y-8"
-              >
+              <div className="space-y-8">
                 <div>
                   <h2 className="text-2xl font-bold text-secondary mb-4">Agreement to Terms</h2>
                   <p className="text-muted leading-relaxed">
@@ -175,7 +169,7 @@ export default function TermsOfService() {
                     acceptance of the new terms.
                   </p>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>

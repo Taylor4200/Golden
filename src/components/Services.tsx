@@ -137,7 +137,7 @@ export default function Services() {
             const IconComponent = service.icon || Wrench;
             return (
               <motion.div
-                key={service.id || index}
+                key={(service as any).id || index}
                 variants={itemVariants}
                 className="card-premium group hover:shadow-2xl transition-all duration-500 p-8 relative overflow-hidden"
               >
@@ -160,10 +160,10 @@ export default function Services() {
                 {/* Enhanced Content */}
                 <div className="space-y-4 relative z-10">
                   <h3 className="text-2xl font-bold text-secondary group-hover:text-primary transition-colors duration-300">
-                    {service.name || service.title}
+                    {(service as any).name || (service as any).title}
                   </h3>
                   <p className="text-muted leading-relaxed text-base text-left">
-                    {service.shortDescription || service.description}
+                    {(service as any).shortDescription || (service as any).description}
                   </p>
 
                   {/* Enhanced Service Details */}
@@ -180,7 +180,7 @@ export default function Services() {
 
                   {/* Enhanced Features */}
                   <ul className="space-y-3 text-left">
-                    {(service.features || []).slice(0, 4).map((feature, featureIndex) => (
+                    {((service as any).features || []).slice(0, 4).map((feature: string, featureIndex: number) => (
                       <motion.li 
                         key={featureIndex} 
                         initial={{ opacity: 0, x: -20 }}
@@ -193,9 +193,9 @@ export default function Services() {
                         <span>{feature}</span>
                       </motion.li>
                     ))}
-                    {service.features && service.features.length > 4 && (
+                    {(service as any).features && (service as any).features.length > 4 && (
                       <li className="text-xs text-primary font-semibold bg-primary/10 px-2 py-1 rounded-full inline-block text-left">
-                        +{service.features.length - 4} more features
+                        +{(service as any).features.length - 4} more features
                       </li>
                     )}
                   </ul>

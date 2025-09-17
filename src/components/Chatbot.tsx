@@ -257,6 +257,44 @@ export default function Chatbot() {
     setLeadData({});
   };
 
+  const completeQuote = async () => {
+    const urgencyText = {
+      'emergency': 'Emergency - Need help now',
+      'urgent': 'Urgent - Within 24 hours', 
+      'routine': 'Routine - Can wait a few days'
+    };
+
+    // Send notification
+    const lead: LeadNotification = {
+      type: 'quote',
+      name: leadData.name || '',
+      phone: leadData.phone || '',
+      email: leadData.email,
+      truckMake: leadData.truckMake,
+      truckModel: leadData.truckModel,
+      issue: leadData.issue,
+      urgency: leadData.urgency as 'emergency' | 'urgent' | 'routine',
+      isFleet: leadData.isFleet,
+      fleetSize: leadData.fleetSize,
+      timestamp: new Date().toISOString(),
+      source: 'chatbot'
+    };
+
+    try {
+      await sendLeadNotification(lead);
+    } catch (error) {
+      console.error('Failed to send notification:', error);
+    }
+
+    addMessage(
+      `✅ **Quote Request Received!**\n\n**Name:** ${leadData.name}\n**Phone:** ${leadData.phone}\n**Truck:** ${leadData.truckMake} ${leadData.truckModel}\n**Issue:** ${leadData.issue}\n**Urgency:** ${urgencyText[leadData.urgency as keyof typeof urgencyText]}\n\nWe'll contact you within 2 hours with a detailed quote.\n\n📞 **Need immediate help?** Call ${settings.contactPhone}`,
+      true
+    );
+    
+    setCurrentStep('completed');
+    setLeadData({});
+  };
+
   const getIntelligentResponse = async (userMessage: string): Promise<{ response: string; shouldShowForm: boolean }> => {
     try {
       const response = await fetch('/api/chatbot-ai', {
