@@ -30,7 +30,7 @@ export default function NewPost() {
       .trim();
   };
 
-  const handleInputChange = (field: keyof BlogPost, value: any) => {
+  const handleInputChange = (field: keyof BlogPost, value: string | string[]) => {
     if (field === 'title') {
       setFormData(prev => ({
         ...prev,

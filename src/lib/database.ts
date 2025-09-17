@@ -11,7 +11,6 @@ import {
   AlertTriangle, 
   Users,
   DollarSign,
-  Gear,
   Zap,
   Circle,
   Calendar,
@@ -19,14 +18,14 @@ import {
 } from 'lucide-react'
 
 // Icon mapping function
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, React.ComponentType> = {
   'wrench': Wrench,
   'cog': Cog,
   'shield': Shield,
   'clock': Clock,
   'truck': Truck,
   'settings': Settings,
-  'gear': Gear,
+  'gear': Cog, // Use Cog instead of Gear
   'alert-triangle': AlertTriangle,
   'users': Users,
   'dollar-sign': DollarSign,
@@ -219,7 +218,7 @@ export async function updateSiteSettings(settings: Record<string, string>): Prom
     .from('site_settings')
     .select('key')
 
-  const existingKeys = existingSettings?.map(s => s.key) || []
+  // const existingKeys = existingSettings?.map(s => s.key) || []
 
   // Prepare upsert data
   const upsertData = Object.entries(settings).map(([key, value]) => ({

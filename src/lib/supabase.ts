@@ -184,7 +184,7 @@ export interface Database {
       chatbot_leads: {
         Row: {
           id: string
-          lead_data: any
+          lead_data: Record<string, unknown>
           notification_sent: boolean
           notification_type: string
           twilio_message_sid: string
@@ -194,7 +194,7 @@ export interface Database {
         }
         Insert: {
           id?: string
-          lead_data: any
+          lead_data: Record<string, unknown>
           notification_sent?: boolean
           notification_type?: string
           twilio_message_sid?: string
@@ -204,7 +204,7 @@ export interface Database {
         }
         Update: {
           id?: string
-          lead_data?: any
+          lead_data?: Record<string, unknown>
           notification_sent?: boolean
           notification_type?: string
           twilio_message_sid?: string

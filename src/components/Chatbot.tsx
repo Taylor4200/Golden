@@ -26,7 +26,7 @@ interface Message {
   timestamp: Date;
   type?: 'text' | 'options' | 'form' | 'emergency';
   options?: ChatOption[];
-  formData?: any;
+  formData?: Record<string, string>;
 }
 
 interface ChatOption {

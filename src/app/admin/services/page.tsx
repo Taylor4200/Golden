@@ -61,7 +61,7 @@ export default function AdminServices() {
       .trim();
   };
 
-  const handleInputChange = (field: keyof Service, value: any) => {
+  const handleInputChange = (field: keyof Service, value: string | string[] | boolean) => {
     if (field === 'name') {
       setFormData(prev => ({
         ...prev,

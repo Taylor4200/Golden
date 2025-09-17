@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Plus, Edit, Trash2, Eye, Calendar, Clock, User, Tag, Search, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Calendar, Clock, User, Tag, Search, Filter, FileText } from 'lucide-react';
 import { blogPosts, blogCategories } from '@/data/blog';
 import { BlogPost } from '@/types/blog';
 import AdminLayout from '@/components/AdminLayout';

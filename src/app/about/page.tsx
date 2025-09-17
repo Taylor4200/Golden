@@ -84,7 +84,7 @@ export default function About() {
                       across <strong>Colorado and beyond</strong>.
                     </p>
                     <p>
-                      Today, we're proud to serve <strong>fleets of all sizes</strong>, from
+                      Today, we&apos;re proud to serve <strong>fleets of all sizes</strong>, from
                       <strong>owner-operators</strong> to <strong>major transportation companies</strong>, with the same
                       <strong>dedication to quality and customer service</strong> that has defined us from
                       day one.
