@@ -131,7 +131,7 @@ export default function Testimonials() {
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">500+</div>
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">10,000+</div>
               <div className="text-gray-300">Trucks Serviced</div>
             </div>
             <div>
@@ -139,7 +139,7 @@ export default function Testimonials() {
               <div className="text-gray-300">Emergency Service</div>
             </div>
             <div>
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">5+</div>
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">20+</div>
               <div className="text-gray-300">Years Experience</div>
             </div>
             <div>

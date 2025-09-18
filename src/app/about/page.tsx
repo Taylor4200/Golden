@@ -12,7 +12,7 @@ export default function About() {
       icon: Wrench,
       title: 'Expert Craftsmanship',
       description:
-        'Our certified mechanics have 5+ years of combined experience working on all major truck brands.',
+        'Our certified mechanics have 20+ years of combined experience working on all major truck brands.',
     },
     {
       icon: Clock,
@@ -38,14 +38,12 @@ export default function About() {
     {
       name: 'Brandon',
       role: 'Co-Founder',
-      experience: '5+ years',
-      specialties: ['Engine Rebuilds', 'Transmission Service', 'Fleet Management'],
+      experience: '10+ years',
     },
     {
       name: 'Tyler',
       role: 'Co-Founder',
-      experience: '5+ years',
-      specialties: ['Customer Relations', 'Service Coordination', 'Quality Control'],
+      experience: '10+ years',
     },
   ];
 
@@ -98,7 +96,7 @@ export default function About() {
                     className="rounded-2xl shadow-2xl w-full h-full object-cover"
                   />
                   <div className="absolute bottom-4 left-4 bg-primary text-white p-4 rounded-xl shadow-lg">
-                    <div className="text-3xl font-bold font-sans">5+</div>
+                    <div className="text-3xl font-bold font-sans">20+</div>
                     <div className="text-sm font-medium">Years of Excellence</div>
                   </div>
                 </div>
@@ -182,17 +180,7 @@ export default function About() {
                     </div>
                     <h3 className="text-2xl font-bold text-secondary mb-3">{founder.name}</h3>
                     <p className="text-primary font-semibold mb-3 text-lg">{founder.role}</p>
-                    <p className="text-muted text-sm mb-6">{founder.experience} Experience</p>
-                    <div className="space-y-2">
-                      {founder.specialties.map((specialty, specIndex) => (
-                        <span
-                          key={specIndex}
-                          className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm mr-2 mb-2"
-                        >
-                          {specialty}
-                        </span>
-                      ))}
-                    </div>
+                    <p className="text-muted text-sm">{founder.experience} Experience</p>
                   </motion.div>
                 ))}
               </div>
