@@ -45,40 +45,28 @@ src/
 │   └── Testimonials.tsx   # Customer testimonials
 ```
 
-## 🚀 Getting Started
+## 🔧 Environment Setup
 
-### Prerequisites
+Create a `.env.local` file in the root directory with the following variables:
 
-- Node.js 18+ 
-- npm, yarn, or pnpm
-
-### Installation
-
-1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd golden-heavy-duty
+# Admin Authentication
+ADMIN_USERNAME=Goldenrepair
+ADMIN_PASSWORD=Goldenrepair1!
+
+# Google Places API Configuration
+GOOGLE_PLACES_API_KEY=your_google_places_api_key
+
+# Cohere API Configuration (FREE AI)
+COHERE_API_KEY=your_cohere_api_key
+COHERE_MODEL=command-r7b-12-2024
+
+# Business Information
+BUSINESS_PHONE=+13033049993
+BUSINESS_EMAIL=info@goldenheavyduty.com
 ```
 
-2. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-```
-
-3. Run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+**Note:** The `.env.local` file is gitignored for security. Copy from `env.example` and update with your actual values.
 
 ## 📱 Pages
 

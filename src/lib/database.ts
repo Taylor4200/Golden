@@ -838,20 +838,34 @@ export async function createServiceCategory(category: Omit<ServiceCategory, 'id'
 
 // Admin Authentication
 export async function authenticateAdmin(username: string, password: string): Promise<boolean> {
-  // For demo purposes, we'll use a simple check
-  // In production, you'd use Supabase Auth or proper password hashing
-  if (username === 'Goldenrepair' && password === 'Goldenrepair1!') {
-    // Update last login
-    await supabase
-      .from('admin_users')
-      .upsert({
-        username: 'Goldenrepair',
-        email: 'admin@goldenheavyduty.com',
-        last_login: new Date().toISOString()
-      }, { onConflict: 'username' })
-    
-    return true
+  // Get credentials from environment variables
+  const adminUsername = process.env.ADMIN_USERNAME;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  
+  // Check if environment variables are set
+  if (!adminUsername || !adminPassword) {
+    console.error('Admin credentials not configured in environment variables');
+    return false;
   }
   
-  return false
+  // Validate credentials
+  if (username === adminUsername && password === adminPassword) {
+    // Update last login in database
+    try {
+      await supabase
+        .from('admin_users')
+        .upsert({
+          username: adminUsername,
+          email: 'admin@goldenheavyduty.com',
+          last_login: new Date().toISOString()
+        }, { onConflict: 'username' });
+    } catch (error) {
+      console.error('Error updating admin login:', error);
+      // Don't fail authentication if database update fails
+    }
+    
+    return true;
+  }
+  
+  return false;
 }
