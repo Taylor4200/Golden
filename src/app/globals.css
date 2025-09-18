@@ -34,6 +34,8 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 body {
@@ -43,6 +45,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -102,10 +105,28 @@ h1, h2, h3, h4, h5, h6 {
 /* Button styles - Enhanced */
 .btn-primary {
   @apply bg-gradient-to-r from-primary to-primary-dark text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 transform;
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
 }
 
-.btn-secondary {
-  @apply bg-gradient-to-r from-secondary to-gray-800 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 transform;
+/* Mobile-optimized text sizing */
+@media (max-width: 640px) {
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Ensure minimum touch target size */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 .btn-outline {

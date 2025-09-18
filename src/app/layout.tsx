@@ -27,6 +27,12 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
   metadataBase: new URL("https://goldenheavyduty.com"),
   alternates: {
     canonical: "/",
