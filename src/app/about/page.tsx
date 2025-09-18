@@ -5,8 +5,11 @@ import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { Wrench, Users, Award, Clock, Shield, MapPin } from 'lucide-react';
 import FacilityCarousel from '@/components/FacilityCarousel';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export default function About() {
+  const { settings } = useSiteSettings();
+  
   const values = [
     {
       icon: Wrench,
@@ -267,8 +270,15 @@ export default function About() {
                           <MapPin className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                           <div>
                             <h4 className="font-semibold text-gray-800">Golden Heavy Duty Repair</h4>
-                            <p className="text-gray-600 text-sm">806 Cedar St, Hudson, CO 80642</p>
-                            <p className="text-gray-500 text-xs mt-1">Mon-Fri: 9AM-9PM, Sat-Sun: 9AM-5PM</p>
+                            <p className="text-gray-600 text-sm mt-1">{settings.address}</p>
+                            <a
+                              href={settings.googleMapsUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:text-primary-dark text-sm font-medium mt-2 inline-block"
+                            >
+                              Get Directions →
+                            </a>
                           </div>
                         </div>
                       </div>

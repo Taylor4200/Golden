@@ -1,4 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Format conversation history for Cohere API
 function formatConversationHistory(history: any[]): any[] {
@@ -14,6 +20,37 @@ function formatConversationHistory(history: any[]): any[] {
     // Fallback for unknown formats
     return { role: 'USER', message: String(msg) };
   }).filter(msg => msg.message && msg.message.trim().length > 0);
+}
+
+// Fetch site settings from database
+async function getSiteSettings() {
+  try {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .single();
+    
+    if (error || !data) {
+      // Return default settings if database fetch fails
+      return {
+        contact_phone: '(303) 304-9993',
+        contact_email: 'breakdown@goldenheavyduty.com',
+        address: '806 Cedar St, Hudson, CO 80642',
+        google_maps_url: 'https://maps.app.goo.gl/iPsAmeqCzYmESgeT8'
+      };
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Error fetching site settings:', error);
+    // Return default settings on error
+    return {
+      contact_phone: '(303) 304-9993',
+      contact_email: 'breakdown@goldenheavyduty.com',
+      address: '806 Cedar St, Hudson, CO 80642',
+      google_maps_url: 'https://maps.app.goo.gl/iPsAmeqCzYmESgeT8'
+    };
+  }
 }
 
 // Sanitize AI responses to prevent weird outputs
@@ -47,6 +84,9 @@ async function getAIFallbackResponse(userMessage: string, conversationHistory?: 
       return "I'm an AI assistant for Golden Heavy Duty Truck Repair. I can help with truck repair questions, scheduling, and emergency assistance. What can I help you with today?";
     }
 
+    // Fetch current site settings
+    const settings = await getSiteSettings();
+
     // Use Cohere's new Chat API - much more reliable
     const response = await fetch('https://api.cohere.ai/v1/chat', {
       method: 'POST',
@@ -63,11 +103,11 @@ async function getAIFallbackResponse(userMessage: string, conversationHistory?: 
 Your identity: You are Golden Heavy Duty's AI assistant, created specifically for this truck repair business. You know about truck repair, our services, and can help customers get the assistance they need.
 
 Business Information:
-- Phone: (303) 304-9993
-- Address: 806 Cedar St, Hudson, CO 80642
+- Phone: ${settings.contact_phone}
+- Address: ${settings.address}
 - Hours: Monday-Friday 9AM-9PM, Saturday-Sunday 9AM-5PM, 24/7 Emergency Service
 
-Always be friendly and professional. Keep responses concise and helpful. When asked about yourself, say you are the AI assistant for Golden Heavy Duty Truck Repair. When asked for phone number, contact info, or how to reach us, provide our phone number (303) 304-9993.
+Always be friendly and professional. Keep responses concise and helpful. When asked about yourself, say you are the AI assistant for Golden Heavy Duty Truck Repair. When asked for phone number, contact info, or how to reach us, provide our phone number ${settings.contact_phone}.
 
 IMPORTANT: Only suggest forms, appointments, or quotes when the user actually needs service or asks for them. For general questions, just answer conversationally. Don't push forms on users who are just asking questions or making small talk.`,
         max_tokens: 350,
@@ -116,6 +156,9 @@ IMPORTANT: Only suggest forms, appointments, or quotes when the user actually ne
 export async function POST(request: NextRequest) {
   try {
     const { message, context, conversationHistory } = await request.json();
+    
+    // Fetch current site settings
+    const settings = await getSiteSettings();
 
     // Conversational AI responses for truck repair context
     const responses = {
@@ -172,9 +215,9 @@ export async function POST(request: NextRequest) {
         "I'll help you find the perfect appointment time! Let me gather some info about your truck and service needs so I can get you connected with our scheduling team."
       ],
       location: [
-        "We're located at 806 Cedar St, Hudson, CO 80642. We serve Hudson, Fort Collins, Greeley, and surrounding Colorado areas.",
+        `We're located at ${settings.address}. We serve Hudson, Fort Collins, Greeley, and surrounding Colorado areas.`,
         "Our shop is conveniently located off I-76 in Hudson, CO. We serve the entire Northern Colorado region.",
-        "You can find us at 806 Cedar St in Hudson, CO. We're easily accessible from I-76 and serve the surrounding areas."
+        `You can find us at ${settings.address}. We're easily accessible from I-76 and serve the surrounding areas.`
       ],
       hours: [
         "We're open Monday-Friday 9AM-9PM, Saturday-Sunday 9AM-5PM. We provide 24/7 emergency roadside assistance.",
@@ -182,9 +225,9 @@ export async function POST(request: NextRequest) {
         "Our shop hours are Monday-Friday 9AM-9PM, Saturday-Sunday 9AM-5PM. Emergency assistance is always available."
       ],
       phone: [
-        "You can reach us at (303) 304-9993. We're available 24/7 for emergency roadside assistance!",
-        "Our phone number is (303) 304-9993. Call us anytime for emergency service or to schedule an appointment.",
-        "Give us a call at (303) 304-9993. We provide 24/7 emergency service and regular business hours support."
+        `You can reach us at ${settings.contact_phone}. We're available 24/7 for emergency roadside assistance!`,
+        `Our phone number is ${settings.contact_phone}. Call us anytime for emergency service or to schedule an appointment.`,
+        `Give us a call at ${settings.contact_phone}. We provide 24/7 emergency service and regular business hours support.`
       ],
       fleet: [
         "Great! We specialize in fleet services. Let me get some details about your fleet and service needs.",

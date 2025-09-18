@@ -6,8 +6,10 @@ import Link from 'next/link';
 import { Calendar, Clock, User, ArrowLeft, ArrowRight, Share2, Tag } from 'lucide-react';
 import { BlogPost } from '@/types/blog';
 import Head from 'next/head';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export default function BlogPostPage() {
+  const { settings } = useSiteSettings();
   const params = useParams();
   const slug = params.slug as string;
   const [post, setPost] = useState<BlogPost | null>(null);
@@ -247,15 +249,19 @@ export default function BlogPostPage() {
                   <strong>Golden Heavy Duty Truck Repair</strong>
                 </div>
                 <div>
-                  806 Cedar St<br />
-                  Hudson, CO 80642
+                  {settings.address.split(',').map((line, index) => (
+                    <span key={index}>
+                      {line.trim()}
+                      {index < settings.address.split(',').length - 1 && <br />}
+                    </span>
+                  ))}
                 </div>
                 <div>
                   <a
-                    href="tel:+13033049993"
+                    href={`tel:${settings.contactPhone.replace(/\D/g, '')}`}
                     className="text-primary hover:text-primary-dark font-medium"
                   >
-                    (303) 304-9993
+                    {settings.contactPhone}
                   </a>
                 </div>
                 <div>

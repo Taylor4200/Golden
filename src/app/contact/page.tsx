@@ -41,7 +41,7 @@ export default function Contact() {
       title: 'Visit Us',
       description: 'Come to our facility',
       details: settings.address,
-      action: `https://maps.google.com/?q=${encodeURIComponent(settings.address)}`,
+      action: settings.googleMapsUrl,
       highlight: 'Easy Access'
     }
   ];

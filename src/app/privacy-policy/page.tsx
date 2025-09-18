@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export const metadata = {
   title: 'Privacy Policy | Golden Heavy Duty Truck Repair',
@@ -8,6 +9,8 @@ export const metadata = {
 };
 
 export default function PrivacyPolicy() {
+  const { settings } = useSiteSettings();
+  
   return (
     <div className="min-h-screen">
       <Header />
@@ -117,9 +120,9 @@ export default function PrivacyPolicy() {
                   <div className="bg-gray-50 p-6 rounded-lg mt-4">
                     <p className="text-muted">
                       <strong>Golden Heavy Duty Truck Repair</strong><br />
-                      806 Cedar St, Hudson, CO 80642<br />
-                      Phone: (303) 304-9993<br />
-                      Email: breakdown@goldenheavyduty.com
+                      {settings.address}<br />
+                      Phone: {settings.contactPhone}<br />
+                      Email: {settings.contactEmail}
                     </p>
                   </div>
                 </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote, ExternalLink } from 'lucide-react';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 interface GoogleReview {
   author_name: string;
@@ -25,6 +26,7 @@ export default function GoogleReviews({
   apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY,
   maxReviews = 6 
 }: GoogleReviewsProps) {
+  const { settings } = useSiteSettings();
   const [reviews, setReviews] = useState<GoogleReview[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -122,7 +124,7 @@ export default function GoogleReviews({
           <span className="text-gray-500">Google Reviews</span>
         </div>
         <a
-          href="https://www.google.com/maps/place/Golden+Heavy+Duty+Repair+-+Onsite+and+24%2F7+Mobile+Truck+%26+Trailer+Repair/@40.0759217,-104.6435692,20z/data=!4m8!3m7!1s0x876c3fa1922d702b:0x98acadf5a36fd384!8m2!3d40.076015!4d-104.6432746!9m1!1b1!16s%2Fg%2F11x8fxtvf7?entry=ttu&g_ep=EgoyMDI1MDkxNC4wIKXMDSoASAFQAw%3D%3D"
+          href="https://www.google.com/maps/place/Golden+Heavy+Duty+Repair+-+Onsite+and+24%2F7+Mobile+Truck+%26+Trailer+Repair/@40.076015,-104.6432746,17z/data=!4m8!3m7!1s0x876c3fa1922d702b:0x98acadf5a36fd384!8m2!3d40.076015!4d-104.6432746!9m1!1b1!16s%2Fg%2F11x8fxtvf7?entry=ttu&g_ep=EgoyMDI1MDkxNS4wIKXMDSoASAFQAw%3D%3D"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center space-x-2 text-primary hover:text-primary-dark transition-colors"
