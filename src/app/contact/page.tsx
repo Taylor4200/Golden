@@ -3,7 +3,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ContactSection from '@/components/ContactSection';
-import { motion } from 'framer-motion';
 import { Phone, MapPin, Clock, Mail, MessageCircle } from 'lucide-react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 import Link from 'next/link';
@@ -68,12 +67,7 @@ export default function Contact() {
         {/* Hero Section */}
         <section className="pt-32 pb-20 bg-gradient-to-br from-secondary to-gray-900 text-white">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center"
-            >
+            <div className="text-center">
               <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center">
                 Contact <span className="text-primary">Us</span>
               </h1>
@@ -81,31 +75,23 @@ export default function Contact() {
                 Ready to get your truck back on the road? We're here to help with 
                 professional heavy-duty repair services.
               </p>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Contact Methods */}
         <section className="py-20 bg-white">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-16"
-            >
+            <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Get In Touch
               </h2>
-            </motion.div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {contactMethods.map((method, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="card text-center group hover:shadow-xl transition-all duration-300"
                 >
                   <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 transition-colors">
@@ -120,7 +106,7 @@ export default function Contact() {
                     {method.details}
                   </a>
                   <p className="text-sm text-primary font-medium">{method.highlight}</p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -130,12 +116,7 @@ export default function Contact() {
         <section className="py-20 bg-gray-50">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: false, margin: "-100px" }}
-              >
+              <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                   Business <span className="text-primary">Hours</span>
                 </h2>
@@ -162,15 +143,9 @@ export default function Contact() {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: false, margin: "-100px" }}
-                className="bg-secondary rounded-2xl p-8 text-white"
-              >
+              <div className="bg-secondary rounded-2xl p-8 text-white">
                 <h3 className="text-2xl font-bold mb-6">Mobile Service Areas</h3>
                 <p className="text-gray-300 mb-6">
                   We provide mobile service within a 100-mile radius of Denver in all directions. 
@@ -201,7 +176,7 @@ export default function Contact() {
                     Don't see your area? <a href={`tel:${settings.contactPhone.replace(/\D/g, '')}`} className="text-primary hover:text-primary-dark transition-colors">Call us</a> to discuss service options.
                   </p>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -212,12 +187,7 @@ export default function Contact() {
         {/* Emergency Contact */}
         <section className="py-20 bg-red-600 text-white">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: false, margin: "-100px" }}
-            >
+            <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">
                 Emergency Service Available 24/7
               </h2>
@@ -232,7 +202,7 @@ export default function Contact() {
                 <Phone className="h-6 w-6" />
                 <span>Call Emergency Line</span>
               </a>
-            </motion.div>
+            </div>
           </div>
         </section>
       </main>

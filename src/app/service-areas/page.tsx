@@ -2,7 +2,6 @@
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { motion } from 'framer-motion';
 import { MapPin, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -43,12 +42,7 @@ export default function ServiceAreas() {
         {/* Hero Section */}
         <section className="pt-32 pb-20 bg-gradient-to-br from-secondary to-gray-900 text-white">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center"
-            >
+            <div className="text-center">
               <Link 
                 href="/contact" 
                 className="inline-flex items-center space-x-2 text-primary hover:text-primary/80 transition-colors mb-6"
@@ -62,23 +56,18 @@ export default function ServiceAreas() {
               <p className="text-xl md:text-2xl text-gray-300 leading-relaxed text-center">
                 We provide mobile heavy-duty truck repair services within a 100-mile radius of Denver, Colorado.
               </p>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Map Section */}
         <section className="py-20 bg-white">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
+            <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Our <span className="text-primary">Coverage Area</span>
               </h2>
-            </motion.div>
+            </div>
 
             
             {/* Our Facility Location */}
@@ -152,34 +141,24 @@ export default function ServiceAreas() {
         {/* Service Areas List */}
         <section className="py-20 bg-gray-50">
           <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: false, margin: "-100px" }}
-              className="text-center mb-12"
-            >
+            <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
                 Complete <span className="text-primary">Service Areas</span>
               </h2>
               <p className="text-xl text-muted max-w-3xl mx-auto text-center">
                 We serve over 100 locations within 100 miles of Denver. Don't see your area? Call us to discuss service options.
               </p>
-            </motion.div>
+            </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {serviceAreas.map((area, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.02 }}
-                  viewport={{ once: false, margin: "-100px" }}
                   className="flex items-center space-x-2 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow"
                 >
                   <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
                   <span className="text-sm text-secondary">{area}</span>
-                </motion.div>
+                </div>
               ))}
             </div>
 
