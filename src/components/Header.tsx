@@ -121,22 +121,14 @@ export default function Header() {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-border">
             <div className="px-6 py-6 space-y-4">
-              {/* Services Section */}
-              <div>
-                <div className="text-secondary font-semibold text-lg py-2">Services</div>
-                <div className="pl-4 space-y-2">
-                  {servicesDropdown.map((service) => (
-                    <Link
-                      key={service.name}
-                      href={service.href}
-                      className="block text-secondary hover:text-primary transition-colors font-medium py-1"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {service.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              {/* Services Link */}
+              <Link
+                href="/services"
+                className="block text-secondary hover:text-primary transition-colors font-semibold text-lg py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Services
+              </Link>
               
               {/* Other Navigation Links */}
               {navigation.map((item) => (
