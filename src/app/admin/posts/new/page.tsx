@@ -1,18 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Save, X, ArrowLeft } from 'lucide-react';
-import { blogCategories } from '@/data/blog';
 import { BlogPost } from '@/types/blog';
 import AdminLayout from '@/components/AdminLayout';
 
 export default function NewPost() {
   const router = useRouter();
+  const [categories, setCategories] = useState<any[]>([]);
   const [formData, setFormData] = useState<Partial<BlogPost>>({
     title: '',
     slug: '',
     excerpt: '',
+    metaDescription: '',
     content: '',
     author: 'Golden Heavy Duty Team',
     category: 'engine-transmission',
@@ -20,6 +21,20 @@ export default function NewPost() {
     readTime: 5,
     published: false
   });
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const response = await fetch('/api/blog-categories');
+        const categoriesData = await response.json();
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
+    };
+
+    loadCategories();
+  }, []);
 
   const generateSlug = (title: string) => {
     return title
@@ -45,15 +60,31 @@ export default function NewPost() {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.title || !formData.content) {
       alert('Please fill in title and content');
       return;
     }
 
-    // In a real app, this would save to a database
-    alert('Post saved successfully!');
-    router.push('/admin/posts');
+    try {
+      const response = await fetch('/api/blog-posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert('Post created successfully!');
+        router.push('/admin/posts');
+      } else {
+        alert('Failed to create post');
+      }
+    } catch (error) {
+      console.error('Error creating post:', error);
+      alert('Failed to create post');
+    }
   };
 
   return (
@@ -146,6 +177,23 @@ export default function NewPost() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Meta Description (SEO)
+                </label>
+                <textarea
+                  value={formData.metaDescription}
+                  onChange={(e) => handleInputChange('metaDescription', e.target.value)}
+                  rows={2}
+                  maxLength={160}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="SEO description for search engines (160 characters max)"
+                />
+                <div className="mt-1 text-sm text-gray-500">
+                  {(formData.metaDescription || '').length}/160 characters
+                </div>
+              </div>
+
               {/* Content */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -216,7 +264,7 @@ export default function NewPost() {
                     onChange={(e) => handleInputChange('category', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   >
-                    {blogCategories.map((category) => (
+                    {categories.map((category) => (
                       <option key={category.id} value={category.slug}>
                         {category.icon} {category.name}
                       </option>

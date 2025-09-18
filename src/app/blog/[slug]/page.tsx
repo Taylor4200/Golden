@@ -4,27 +4,34 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Clock, User, ArrowLeft, ArrowRight, Share2, Tag } from 'lucide-react';
-import { blogCategories } from '@/data/blog';
 import { BlogPost } from '@/types/blog';
-import { getBlogPostBySlug, getBlogPosts } from '@/lib/database';
+import Head from 'next/head';
 
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
   const [post, setPost] = useState<BlogPost | null>(null);
   const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadPost = async () => {
       try {
-        const [postData, allPosts] = await Promise.all([
-          getBlogPostBySlug(slug),
-          getBlogPosts()
+        const [postResponse, allPostsResponse, categoriesResponse] = await Promise.all([
+          fetch(`/api/blog-posts?slug=${slug}`),
+          fetch('/api/blog-posts?published=true'),
+          fetch('/api/blog-categories')
         ]);
         
-        setPost(postData);
-        setRecentPosts(allPosts.filter(p => p.published).slice(0, 3));
+        const postData = await postResponse.json();
+        const allPosts = await allPostsResponse.json();
+        const categoriesData = await categoriesResponse.json();
+        
+        const foundPost = postData.find((p: any) => p.slug === slug);
+        setPost(foundPost);
+        setRecentPosts(allPosts.slice(0, 3));
+        setCategories(categoriesData);
       } catch (error) {
         console.error('Error loading post:', error);
       } finally {
@@ -53,6 +60,8 @@ export default function BlogPostPage() {
     );
   }
 
+  const categoryInfo = categories.find(cat => cat.slug === post.category);
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -60,12 +69,6 @@ export default function BlogPostPage() {
       day: 'numeric'
     });
   };
-
-  const getCategoryInfo = (categorySlug: string) => {
-    return blogCategories.find(cat => cat.slug === categorySlug);
-  };
-
-  const categoryInfo = getCategoryInfo(post.category);
 
   // Convert markdown-like content to HTML (simple implementation)
   const formatContent = (content: string) => {
@@ -83,7 +86,19 @@ export default function BlogPostPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <Head>
+        <title>{post.title} | Golden Heavy Duty Blog</title>
+        <meta name="description" content={post.meta_description || post.excerpt} />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.meta_description || post.excerpt} />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={`https://goldenheavyduty.com/blog/${post.slug}`} />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.meta_description || post.excerpt} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
+      <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16 py-8">
@@ -258,5 +273,6 @@ export default function BlogPostPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

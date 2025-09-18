@@ -1,53 +1,55 @@
-import { BlogPost, BlogCategory } from '@/types/blog';
+-- Step 1: Drop existing tables if they exist (to start fresh)
+DROP TABLE IF EXISTS blog_posts CASCADE;
+DROP TABLE IF EXISTS blog_categories CASCADE;
 
-export const blogCategories: BlogCategory[] = [
-  {
-    id: 'engine-transmission',
-    name: 'Engine & Transmission',
-    slug: 'engine-transmission',
-    description: 'Expert insights on diesel engines, transmissions, and powertrain systems',
-    icon: '🔧'
-  },
-  {
-    id: 'brakes-safety',
-    name: 'Brakes & Safety',
-    slug: 'brakes-safety',
-    description: 'Critical safety information for air brakes and heavy-duty braking systems',
-    icon: '🛑'
-  },
-  {
-    id: 'electrical-diagnostics',
-    name: 'Electrical & Diagnostics',
-    slug: 'electrical-diagnostics',
-    description: 'Electrical systems, diagnostics, and troubleshooting guides',
-    icon: '⚡'
-  },
-  {
-    id: 'tires-suspension',
-    name: 'Tires, Suspension & Alignment',
-    slug: 'tires-suspension',
-    description: 'Tire maintenance, suspension systems, and alignment services',
-    icon: '🛞'
-  },
-  {
-    id: 'preventative-maintenance',
-    name: 'Preventative Maintenance',
-    slug: 'preventative-maintenance',
-    description: 'Maintenance schedules, checklists, and cost-saving tips',
-    icon: '🛠'
-  }
-];
+-- Step 2: Create Blog Posts Table
+CREATE TABLE blog_posts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  excerpt TEXT NOT NULL,
+  meta_description TEXT,
+  content TEXT NOT NULL,
+  author TEXT NOT NULL DEFAULT 'Golden Heavy Duty Team',
+  published_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  category TEXT NOT NULL,
+  tags TEXT[] DEFAULT '{}',
+  featured_image TEXT,
+  read_time INTEGER DEFAULT 5,
+  published BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-export const blogPosts: BlogPost[] = [
-  {
-    id: '1',
-    title: 'How to Tell If Your Semi Truck Engine Is About to Fail',
-    slug: 'how-to-tell-if-your-semi-truck-engine-is-about-to-fail',
-    excerpt: 'Learn the critical warning signs that indicate your semi truck engine is failing before it leaves you stranded on the highway.',
-    metaDescription: 'Don\'t wait until your engine quits on the open road. Learn the top warning signs that a semi-truck engine is failing, what they mean, and what maintenance steps you can take now to avoid costly breakdowns.',
-    content: `# How to Tell If Your Semi Truck Engine Is About to Fail
+-- Step 3: Create Blog Categories Table
+CREATE TABLE blog_categories (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  description TEXT NOT NULL,
+  icon TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-Your semi truck engine is the heart of your operation. When it fails, you're not just dealing with expensive repairs – you're facing downtime that costs money every hour. At Golden Heavy Duty Truck Repair in Hudson, CO, we've seen every type of engine failure imaginable. Here are the warning signs that indicate your engine is about to fail, and what you can do about it.
+-- Step 4: Insert default categories
+INSERT INTO blog_categories (id, name, slug, description, icon) VALUES
+('engine-transmission', 'Engine & Transmission', 'engine-transmission', 'Expert insights on diesel engines, transmissions, and powertrain systems', '🔧'),
+('brakes-safety', 'Brakes & Safety', 'brakes-safety', 'Critical safety information for air brakes and heavy-duty braking systems', '🛑'),
+('electrical-diagnostics', 'Electrical & Diagnostics', 'electrical-diagnostics', 'Electrical systems, diagnostics, and troubleshooting guides', '⚡'),
+('tires-suspension', 'Tires, Suspension & Alignment', 'tires-suspension', 'Tire maintenance, suspension systems, and alignment services', '🛞'),
+('preventative-maintenance', 'Preventative Maintenance', 'preventative-maintenance', 'Maintenance schedules, checklists, and cost-saving tips', '🛠');
+
+-- Step 5: Insert sample blog posts
+INSERT INTO blog_posts (id, title, slug, excerpt, meta_description, content, author, published_at, updated_at, category, tags, read_time, published) VALUES
+(
+  gen_random_uuid(),
+  'How to Tell If Your Semi Truck Engine Is About to Fail',
+  'how-to-tell-if-your-semi-truck-engine-is-about-to-fail',
+  'Learn the critical warning signs that indicate your semi truck engine is failing before it leaves you stranded on the highway.',
+  'Don''t wait until your engine quits on the open road. Learn the top warning signs that a semi-truck engine is failing, what they mean, and what maintenance steps you can take now to avoid costly breakdowns.',
+  '# How to Tell If Your Semi Truck Engine Is About to Fail
+
+Your semi truck engine is the heart of your operation. When it fails, you''re not just dealing with expensive repairs – you''re facing downtime that costs money every hour. At Golden Heavy Duty Truck Repair in Hudson, CO, we''ve seen every type of engine failure imaginable. Here are the warning signs that indicate your engine is about to fail, and what you can do about it.
 
 ## Critical Warning Signs
 
@@ -152,32 +154,32 @@ Located at 806 Cedar St in Hudson, CO, we specialize in heavy-duty truck engine 
 - **Warranty Coverage**: Comprehensive warranty on all repairs
 - **Fast Turnaround**: Get back on the road quickly
 
-## Don't Wait Until It's Too Late
+## Don''t Wait Until It''s Too Late
 
-Engine failures don't happen overnight. They develop over time, and the warning signs are there if you know what to look for. Regular maintenance and early intervention can save you thousands of dollars and prevent dangerous roadside breakdowns.
+Engine failures don''t happen overnight. They develop over time, and the warning signs are there if you know what to look for. Regular maintenance and early intervention can save you thousands of dollars and prevent dangerous roadside breakdowns.
 
 **Need expert help in Hudson, CO? Call Golden Heavy Duty Truck Repair today at (303) 304-9993 for immediate assistance or to schedule a comprehensive engine inspection.**
 
 ---
 
-*Golden Heavy Duty Truck Repair | 806 Cedar St, Hudson, CO 80642 | Serving Colorado's truckers 24/7*`,
-    author: 'Golden Heavy Duty Team',
-    publishedAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-01-15T10:00:00Z',
-    category: 'engine-transmission',
-    tags: ['engine', 'diagnostics', 'maintenance', 'troubleshooting'],
-    readTime: 8,
-    published: true
-  },
-  {
-    id: '2',
-    title: 'Air Brake Failures in Big Rigs: Warning Signs Every Driver Should Know',
-    slug: 'air-brake-failures-in-big-rigs-warning-signs-every-driver-should-know',
-    excerpt: 'Critical safety information about air brake system failures that every commercial driver needs to know to stay safe on the road.',
-    metaDescription: 'Critical safety information about air brake system failures that every commercial driver needs to know to stay safe on the road. Learn warning signs, emergency procedures, and maintenance tips.',
-    content: `# Air Brake Failures in Big Rigs: Warning Signs Every Driver Should Know
+*Golden Heavy Duty Truck Repair | 806 Cedar St, Hudson, CO 80642 | Serving Colorado''s truckers 24/7*',
+  'Golden Heavy Duty Team',
+  '2024-01-15T10:00:00Z',
+  '2024-01-15T10:00:00Z',
+  'engine-transmission',
+  ARRAY['engine', 'diagnostics', 'maintenance', 'troubleshooting'],
+  8,
+  true
+),
+(
+  gen_random_uuid(),
+  'Air Brake Failures in Big Rigs: Warning Signs Every Driver Should Know',
+  'air-brake-failures-in-big-rigs-warning-signs-every-driver-should-know',
+  'Critical safety information about air brake system failures that every commercial driver needs to know to stay safe on the road.',
+  'Critical safety information about air brake system failures that every commercial driver needs to know to stay safe on the road. Learn warning signs, emergency procedures, and maintenance tips.',
+  '# Air Brake Failures in Big Rigs: Warning Signs Every Driver Should Know
 
-Air brake systems are the most critical safety component on your semi truck. When they fail, the consequences can be catastrophic. At Golden Heavy Duty Truck Repair, we've seen too many preventable accidents caused by brake system failures. Here's what every driver needs to know about air brake warning signs and when to seek immediate service.
+Air brake systems are the most critical safety component on your semi truck. When they fail, the consequences can be catastrophic. At Golden Heavy Duty Truck Repair, we''ve seen too many preventable accidents caused by brake system failures. Here''s what every driver needs to know about air brake warning signs and when to seek immediate service.
 
 ## Understanding Your Air Brake System
 
@@ -250,7 +252,7 @@ Air brake systems are the most critical safety component on your semi truck. Whe
 **Air Pressure Warning Light**
 - **Meaning**: Air pressure below safe operating level
 - **Action**: Stop immediately and build air pressure
-- **If pressure won't build**: Call for emergency service
+- **If pressure won''t build**: Call for emergency service
 
 ## Daily Pre-Trip Inspection Checklist
 
@@ -271,17 +273,17 @@ Air brake systems are the most critical safety component on your semi truck. Whe
 ## Emergency Procedures
 
 ### If Brakes Fail While Driving
-1. **Stay calm** and don't panic
+1. **Stay calm** and don''t panic
 2. **Downshift** to use engine braking
 3. **Use parking brake** gradually (not all at once)
 4. **Look for escape routes** - runaway truck ramps or safe areas
 5. **Use horn** to warn other drivers
 6. **Call emergency services** immediately
 
-### If Air Pressure Won't Build
+### If Air Pressure Won''t Build
 1. **Stop immediately** in a safe location
 2. **Check for obvious air leaks**
-3. **Don't attempt to drive** with low air pressure
+3. **Don''t attempt to drive** with low air pressure
 4. **Call for emergency service** - (303) 304-9993
 
 ## Maintenance Schedule
@@ -337,32 +339,32 @@ Located at 806 Cedar St in Hudson, CO, we specialize in heavy-duty brake system 
 - **Comprehensive warranty** - Peace of mind on all repairs
 - **24/7 emergency service** - When you need us most
 
-## Don't Risk Your Safety
+## Don''t Risk Your Safety
 
-Air brake failures are not just expensive – they're dangerous. Regular maintenance and early intervention can prevent catastrophic failures and keep you safe on the road.
+Air brake failures are not just expensive – they''re dangerous. Regular maintenance and early intervention can prevent catastrophic failures and keep you safe on the road.
 
 **Need expert brake service in Hudson, CO? Call Golden Heavy Duty Truck Repair today at (303) 304-9993 for immediate assistance or to schedule a comprehensive brake inspection.**
 
 ---
 
-*Golden Heavy Duty Truck Repair | 806 Cedar St, Hudson, CO 80642 | Serving Colorado's truckers 24/7*`,
-    author: 'Golden Heavy Duty Team',
-    publishedAt: '2024-01-20T10:00:00Z',
-    updatedAt: '2024-01-20T10:00:00Z',
-    category: 'brakes-safety',
-    tags: ['brakes', 'safety', 'air-brakes', 'maintenance'],
-    readTime: 10,
-    published: true
-  },
-  {
-    id: '3',
-    title: 'Semi Truck Preventative Maintenance Checklist (Free Download)',
-    slug: 'semi-truck-preventative-maintenance-checklist-free-download',
-    excerpt: 'Download our comprehensive preventative maintenance checklist to keep your semi truck running smoothly and avoid costly breakdowns.',
-    metaDescription: 'Download our comprehensive preventative maintenance checklist to keep your semi truck running smoothly and avoid costly breakdowns. Daily, weekly, monthly, and seasonal maintenance schedules.',
-    content: `# Semi Truck Preventative Maintenance Checklist (Free Download)
+*Golden Heavy Duty Truck Repair | 806 Cedar St, Hudson, CO 80642 | Serving Colorado''s truckers 24/7*',
+  'Golden Heavy Duty Team',
+  '2024-01-20T10:00:00Z',
+  '2024-01-20T10:00:00Z',
+  'brakes-safety',
+  ARRAY['brakes', 'safety', 'air-brakes', 'maintenance'],
+  10,
+  true
+),
+(
+  gen_random_uuid(),
+  'Semi Truck Preventative Maintenance Checklist (Free Download)',
+  'semi-truck-preventative-maintenance-checklist-free-download',
+  'Download our comprehensive preventative maintenance checklist to keep your semi truck running smoothly and avoid costly breakdowns.',
+  'Download our comprehensive preventative maintenance checklist to keep your semi truck running smoothly and avoid costly breakdowns. Daily, weekly, monthly, and seasonal maintenance schedules.',
+  '# Semi Truck Preventative Maintenance Checklist (Free Download)
 
-Preventative maintenance is the key to keeping your semi truck on the road and your repair costs down. At Golden Heavy Duty Truck Repair in Hudson, CO, we've developed this comprehensive checklist based on over 5 years of experience servicing heavy-duty trucks. Use this checklist to stay ahead of problems and keep your rig running smoothly.
+Preventative maintenance is the key to keeping your semi truck on the road and your repair costs down. At Golden Heavy Duty Truck Repair in Hudson, CO, we''ve developed this comprehensive checklist based on over 5 years of experience servicing heavy-duty trucks. Use this checklist to stay ahead of problems and keep your rig running smoothly.
 
 ## Why Preventative Maintenance Matters
 
@@ -599,28 +601,30 @@ Keep this checklist handy and use it regularly to maintain your semi truck. Regu
 
 ---
 
-*Golden Heavy Duty Truck Repair | 806 Cedar St, Hudson, CO 80642 | Serving Colorado's truckers 24/7*`,
-    author: 'Golden Heavy Duty Team',
-    publishedAt: '2024-01-25T10:00:00Z',
-    updatedAt: '2024-01-25T10:00:00Z',
-    category: 'preventative-maintenance',
-    tags: ['maintenance', 'checklist', 'preventive', 'schedule'],
-    readTime: 12,
-    published: true
-  }
-];
+*Golden Heavy Duty Truck Repair | 806 Cedar St, Hudson, CO 80642 | Serving Colorado''s truckers 24/7*',
+  'Golden Heavy Duty Team',
+  '2024-01-25T10:00:00Z',
+  '2024-01-25T10:00:00Z',
+  'preventative-maintenance',
+  ARRAY['maintenance', 'checklist', 'preventive', 'schedule'],
+  12,
+  true
+);
 
-export function getBlogPostBySlug(slug: string): BlogPost | undefined {
-  return blogPosts.find(post => post.slug === slug);
-}
+-- Step 6: Create indexes for better performance
+CREATE INDEX idx_blog_posts_slug ON blog_posts(slug);
+CREATE INDEX idx_blog_posts_published ON blog_posts(published);
+CREATE INDEX idx_blog_posts_category ON blog_posts(category);
+CREATE INDEX idx_blog_posts_published_at ON blog_posts(published_at);
 
-export function getBlogPostsByCategory(category: string): BlogPost[] {
-  return blogPosts.filter(post => post.category === category);
-}
+-- Step 7: Enable Row Level Security
+ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE blog_categories ENABLE ROW LEVEL SECURITY;
 
-export function getRecentBlogPosts(limit: number = 5): BlogPost[] {
-  return blogPosts
-    .filter(post => post.published)
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    .slice(0, limit);
-}
+-- Step 8: Create policies (allow public read access, admin write access)
+CREATE POLICY "Allow public read access to blog_posts" ON blog_posts FOR SELECT USING (published = true);
+CREATE POLICY "Allow public read access to blog_categories" ON blog_categories FOR SELECT USING (true);
+
+-- Admin policies (you'll need to create an admin role)
+CREATE POLICY "Allow admin full access to blog_posts" ON blog_posts FOR ALL USING (auth.role() = 'admin');
+CREATE POLICY "Allow admin full access to blog_categories" ON blog_categories FOR ALL USING (auth.role() = 'admin');

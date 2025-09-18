@@ -1,29 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plus, Edit, Trash2, Eye, Calendar, Clock, User, Tag, Search, Filter, FileText } from 'lucide-react';
-import { blogPosts, blogCategories } from '@/data/blog';
 import { BlogPost } from '@/types/blog';
 import AdminLayout from '@/components/AdminLayout';
 
 export default function AdminPosts() {
-  const [posts, setPosts] = useState<BlogPost[]>(blogPosts);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>('all');
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredPosts = posts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || 
-                         (filterStatus === 'published' && post.published) ||
-                         (filterStatus === 'draft' && !post.published);
-    return matchesSearch && matchesStatus;
-  });
+  useEffect(() => {
+    loadData();
+  }, []);
 
-  const handleDelete = (postId: string) => {
+  const loadData = async () => {
+    try {
+      const [postsResponse, categoriesResponse] = await Promise.all([
+        fetch('/api/blog-posts'),
+        fetch('/api/blog-categories')
+      ]);
+
+      const postsData = await postsResponse.json();
+      const categoriesData = await categoriesResponse.json();
+
+      setPosts(postsData);
+      setCategories(categoriesData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (postId: string) => {
     if (confirm('Are you sure you want to delete this post?')) {
-      setPosts(prev => prev.filter(post => post.id !== postId));
+      try {
+        const response = await fetch(`/api/blog-posts?id=${postId}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          setPosts(prev => prev.filter(post => post.id !== postId));
+        } else {
+          alert('Failed to delete post');
+        }
+      } catch (error) {
+        console.error('Error deleting post:', error);
+        alert('Failed to delete post');
+      }
     }
   };
 
@@ -35,9 +63,28 @@ export default function AdminPosts() {
     });
   };
 
+  const filteredPosts = posts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus === 'all' || 
+                         (filterStatus === 'published' && post.published) ||
+                         (filterStatus === 'draft' && !post.published);
+    return matchesSearch && matchesStatus;
+  });
+
   const getCategoryInfo = (categorySlug: string) => {
-    return blogCategories.find(cat => cat.slug === categorySlug);
+    return Array.isArray(categories) ? categories.find(cat => cat.slug === categorySlug) : null;
   };
+
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-gray-500">Loading posts...</div>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>

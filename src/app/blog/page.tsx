@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Calendar, Clock, User, ArrowRight, Search, Filter, Phone, Wrench, Shield, ChevronLeft } from 'lucide-react';
 import { blogCategories } from '@/data/blog';
 import { BlogPost, BlogCategory } from '@/types/blog';
-import { getBlogPosts } from '@/lib/database';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -16,14 +15,14 @@ export default function BlogPage() {
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load posts from Supabase
+  // Load posts from API
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        const postsData = await getBlogPosts();
-        const publishedPosts = postsData.filter(post => post.published);
+        const response = await fetch('/api/blog-posts?published=true');
+        const postsData = await response.json();
         setAllPosts(postsData);
-        setFilteredPosts(publishedPosts);
+        setFilteredPosts(postsData);
       } catch (error) {
         console.error('Error loading posts:', error);
       } finally {
@@ -36,7 +35,7 @@ export default function BlogPage() {
 
   const handleCategoryFilter = (category: string) => {
     setSelectedCategory(category);
-    let posts = allPosts.filter(post => post.published);
+    let posts = allPosts;
     
     if (category !== 'all') {
       posts = posts.filter(post => post.category === category);
@@ -55,7 +54,7 @@ export default function BlogPage() {
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    let posts = allPosts.filter(post => post.published);
+    let posts = allPosts;
     
     if (selectedCategory !== 'all') {
       posts = posts.filter(post => post.category === selectedCategory);
