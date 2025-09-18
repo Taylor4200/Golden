@@ -63,7 +63,7 @@ COHERE_MODEL=command-r7b-12-2024
 
 # Business Information
 BUSINESS_PHONE=+13033049993
-BUSINESS_EMAIL=info@goldenheavyduty.com
+BUSINESS_EMAIL=breakdown@goldenheavyduty.com
 ```
 
 **Note:** The `.env.local` file is gitignored for security. Copy from `env.example` and update with your actual values.
@@ -136,7 +136,7 @@ The easiest way to deploy is using [Vercel](https://vercel.com):
 **Golden Heavy Duty Truck Repair**
 - Address: 806 Cedar St, Hudson, CO 80642
 - Phone: (970) 123-4567
-- Email: info@goldenheavyduty.com
+- Email: breakdown@goldenheavyduty.com
 - Hours: Mon-Fri 7AM-6PM, Sat 8AM-4PM, 24/7 Emergency
 
 ## 📄 License

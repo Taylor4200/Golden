@@ -48,7 +48,7 @@ ON CONFLICT (username) DO NOTHING;
 INSERT INTO site_settings (key, value) VALUES
   ('site_name', 'Golden Heavy Duty Truck Repair'),
   ('site_description', 'Professional heavy-duty truck repair services in Hudson, CO'),
-  ('contact_email', 'info@goldenheavyduty.com'),
+  ('contact_email', 'breakdown@goldenheavyduty.com'),
   ('contact_phone', '(303) 304-9993'),
   ('address', '806 Cedar St, Hudson, CO 80642'),
   ('business_hours', 'Mon-Fri: 7AM-6PM, Sat: 8AM-4PM, 24/7 Emergency'),
