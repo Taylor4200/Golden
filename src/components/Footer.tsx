@@ -53,39 +53,38 @@ export default function Footer() {
                 alt="Golden Heavy Duty Repair"
                 width={300}
                 height={120}
-                className="h-30 w-auto"
+                className="h-45 w-auto"
               />
             </Link>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              {settings.siteDescription}
-            </p>
-            <div className="flex space-x-4">
+            <div className="flex items-start space-x-3">
               <a 
                 href="https://www.instagram.com/goldenheavyduty/?hl=en" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-gray-300 hover:text-primary transition-colors"
+                className="text-gray-300 hover:text-primary transition-colors flex-shrink-0 mt-1"
               >
                 <Instagram className="h-5 w-5" />
               </a>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Professional heavy-duty truck repair services in Hudson, CO
+              </p>
             </div>
           </div>
 
           {/* Services */}
           <div className="space-y-3">
             <h4 className="text-lg font-semibold">Our Services</h4>
-            <ul className="space-y-1">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
               {displayServices.map((service) => (
-                <li key={service}>
-                  <Link 
-                    href="/services" 
-                    className="text-gray-300 hover:text-primary transition-colors text-xs"
-                  >
-                    {service}
-                  </Link>
-                </li>
+                <Link 
+                  key={service}
+                  href="/services" 
+                  className="text-gray-300 hover:text-primary transition-colors text-sm"
+                >
+                  {service}
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
 
           {/* Quick Links */}
