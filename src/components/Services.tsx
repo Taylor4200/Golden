@@ -281,6 +281,41 @@ export default function Services() {
           })}
         </motion.div>
 
+        {/* And More Services Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mt-16"
+        >
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-8 md:p-12 border border-gray-200">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: false, margin: "-100px" }}
+            >
+              <h3 className="text-2xl md:text-3xl font-bold text-secondary mb-4">
+                And <span className="text-primary">More</span>
+              </h3>
+              <p className="text-lg text-muted mb-8 max-w-2xl mx-auto leading-relaxed">
+                We offer additional services including mobile repair, emergency roadside assistance, 
+                and specialized heavy-duty solutions. See our complete service list.
+              </p>
+              <motion.a
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                href="/services"
+                className="inline-flex items-center space-x-3 bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                <span>View All Services</span>
+                <ArrowRight className="h-5 w-5" />
+              </motion.a>
+            </motion.div>
+          </div>
+        </motion.div>
+
         {/* Enhanced Bottom CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
