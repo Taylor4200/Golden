@@ -216,33 +216,18 @@ export default function Services() {
   const process = [
     {
       step: '01',
-      title: 'Initial Contact',
-      description: 'Call us or fill out our online form. We\'ll gather information about your truck and the issue.'
+      title: 'Call or Stop By',
+      description: 'Give us a call or bring your truck in. We\'ll take a look and tell you what\'s wrong.'
     },
     {
       step: '02',
-      title: 'Diagnosis',
-      description: 'Our certified technicians will diagnose the problem using state-of-the-art equipment.'
+      title: 'Get a Quote',
+      description: 'We\'ll give you a price for the repair. No surprises, just honest pricing.'
     },
     {
       step: '03',
-      title: 'Quote & Approval',
-      description: 'We\'ll provide a detailed quote and get your approval before starting any work.'
-    },
-    {
-      step: '04',
-      title: 'Repair & Service',
-      description: 'Our experienced team will complete the repair using quality parts and proven techniques.'
-    },
-    {
-      step: '05',
-      title: 'Quality Check',
-      description: 'Every repair undergoes a thorough quality inspection before being returned to you.'
-    },
-    {
-      step: '06',
-      title: 'Delivery',
-      description: 'Your truck is returned to you with a warranty and detailed service documentation.'
+      title: 'Fix It & Go',
+      description: 'We fix your truck and get you back on the road. Simple as that.'
     }
   ];
 
@@ -356,11 +341,10 @@ export default function Services() {
               className="text-center mb-16"
             >
               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
-                Our Service <span className="text-primary">Process</span>
+                How We <span className="text-primary">Work</span>
               </h2>
               <p className="text-xl text-muted text-center">
-                We follow a proven process to ensure quality service and customer satisfaction 
-                every time.
+                Simple, straightforward truck repair. No complicated processes, just good work.
               </p>
             </motion.div>
 
@@ -368,7 +352,7 @@ export default function Services() {
               {/* Connection line for desktop */}
               <div className="hidden lg:block absolute top-8 left-0 right-0 h-0.5 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20"></div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
                 {process.map((step, index) => (
                   <motion.div
                     key={index}

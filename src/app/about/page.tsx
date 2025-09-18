@@ -93,7 +93,7 @@ export default function About() {
               >
                 <div className="w-full h-full relative">
                   <img
-                    src="/pexels-robertkso-18468424.jpg"
+                    src="/f7abb1dc-dd66-42db-8b82-0c77070fad32.jfif"
                     alt="Professional heavy-duty truck repair service"
                     className="rounded-2xl shadow-2xl w-full h-full object-cover"
                   />
