@@ -19,17 +19,26 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      // Import the database function
-      const { authenticateAdmin } = await import('@/lib/database');
+      // Call the API route for authentication
+      const response = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: credentials.username,
+          password: credentials.password,
+        }),
+      });
+
+      const data = await response.json();
       
-      const isValid = await authenticateAdmin(credentials.username, credentials.password);
-      
-      if (isValid) {
+      if (data.success) {
         localStorage.setItem('admin_authenticated', 'true');
         localStorage.setItem('admin_user', credentials.username);
         router.push('/admin');
       } else {
-        setError('Invalid username or password');
+        setError(data.error || 'Invalid username or password');
       }
     } catch (err) {
       console.error('Login error:', err);
