@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Phone, MapPin, Clock, Mail, Send, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
@@ -77,13 +76,7 @@ export default function ContactSection() {
     <section className="py-40 bg-gradient-to-br from-gray-50 via-white to-gray-100 relative overflow-hidden">
       <div className="max-w-8xl mx-auto px-8 sm:px-12 lg:px-16">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-32"
-        >
+        <div className="text-center mb-32">
           <h2 className="text-5xl md:text-6xl font-bold text-secondary mb-8">
             Get In <span className="text-primary">Touch</span>
           </h2>
@@ -91,17 +84,11 @@ export default function ContactSection() {
             Ready to get your truck back on the road? Contact us today for 
             professional heavy-duty repair services.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Enhanced Contact Information */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
+          <div className="space-y-8">
             {/* Contact Info Cards */}
             <div className="space-y-6">
               <h3 className="text-3xl font-bold text-secondary mb-8">
@@ -109,12 +96,8 @@ export default function ContactSection() {
               </h3>
               
               {contactInfo.map((info, index) => (
-                <motion.div 
+                <div 
                   key={index} 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: false, margin: "-100px" }}
                   className="card hover:shadow-xl transition-all duration-300"
                 >
                   <div className="flex items-start space-x-4">
@@ -136,18 +119,12 @@ export default function ContactSection() {
                       <p className="text-muted text-sm">{info.description}</p>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
             {/* Enhanced Map Section */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: false, margin: "-100px" }}
-              className="bg-gradient-to-br from-secondary via-gray-800 to-secondary rounded-2xl p-8 text-white relative overflow-hidden"
-            >
+            <div className="bg-gradient-to-br from-secondary via-gray-800 to-secondary rounded-2xl p-8 text-white relative overflow-hidden">
               {/* Background Pattern */}
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute inset-0" style={{
@@ -164,9 +141,7 @@ export default function ContactSection() {
                   Located conveniently off I-76 in Hudson, CO. Easy access for 
                   trucks and emergency towing services.
                 </p>
-                <motion.a
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <a
                   href={settings.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -174,19 +149,13 @@ export default function ContactSection() {
                 >
                   <MapPin className="h-5 w-5" />
                   <span>Get Directions</span>
-                </motion.a>
+                </a>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Enhanced Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="card-premium relative overflow-hidden"
-          >
+          <div className="card-premium relative overflow-hidden">
             {/* Form Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 opacity-50" />
             <h3 className="text-2xl font-bold text-secondary mb-2">Request Service</h3>
@@ -283,15 +252,13 @@ export default function ContactSection() {
                   />
                 </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                <button
                   type="submit"
                   className="btn-primary w-full flex items-center justify-center space-x-2 shadow-glow"
                 >
                   <Send className="h-5 w-5" />
                   <span>Send Message</span>
-                </motion.button>
+                </button>
 
                 <p className="text-sm text-muted text-center">
                   * Required fields.
@@ -328,7 +295,7 @@ export default function ContactSection() {
                 </div>
               </form>
             )}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
