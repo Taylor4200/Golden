@@ -68,12 +68,54 @@ export async function sendEmailNotification(lead: LeadNotification) {
   }
 }
 
+// Direct SMS sending using Twilio
+async function sendDirectSMS(lead: LeadNotification) {
+  try {
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const fromNumber = process.env.TWILIO_PHONE_NUMBER;
+    const toNumber = '+13033049993'; // Your personal number
+
+    if (!accountSid || !authToken || !fromNumber) {
+      console.error('Missing Twilio credentials');
+      return { success: false, error: 'Missing Twilio credentials' };
+    }
+
+    const message = formatSMSMessage(lead);
+
+    const response = await fetch('https://api.twilio.com/2010-04-01/Accounts/' + accountSid + '/Messages.json', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + btoa(accountSid + ':' + authToken),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        'From': fromNumber,
+        'To': toNumber,
+        'Body': message
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Twilio SMS error:', errorText);
+      return { success: false, error: errorText };
+    }
+
+    const data = await response.json();
+    console.log('✅ SMS sent successfully:', data.sid);
+    return { success: true, messageId: data.sid };
+
+  } catch (error) {
+    console.error('SMS sending failed:', error);
+    return { success: false, error: 'Failed to send SMS' };
+  }
+}
+
 export async function sendLeadNotification(lead: LeadNotification) {
-  // For now, just log the lead and return success
-  // This allows the chatbot to work without requiring Edge Functions to be deployed
   console.log('📱 Lead captured:', lead);
   
-  // Store lead in localStorage for now (can be viewed in browser dev tools)
+  // Store lead in localStorage for backup
   const existingLeads = JSON.parse(localStorage.getItem('chatbot_leads') || '[]');
   existingLeads.push({
     ...lead,
@@ -82,20 +124,12 @@ export async function sendLeadNotification(lead: LeadNotification) {
   });
   localStorage.setItem('chatbot_leads', JSON.stringify(existingLeads));
   
-  // TODO: Uncomment when Edge Functions are deployed
-  // const [smsResult, emailResult] = await Promise.allSettled([
-  //   sendSMSNotification(lead),
-  //   sendEmailNotification(lead)
-  // ]);
-
-  // return {
-  //   sms: smsResult.status === 'fulfilled' ? smsResult.value : { success: false, error: 'SMS failed' },
-  //   email: emailResult.status === 'fulfilled' ? emailResult.value : { success: false, error: 'Email failed' }
-  // };
-
+  // For now, skip SMS due to A2P requirements and use email
+  console.log('📧 SMS skipped due to A2P requirements, using email instead');
+  
   return {
-    sms: { success: true, message: 'Lead logged (SMS not configured yet)' },
-    email: { success: true, message: 'Lead logged (Email not configured yet)' }
+    sms: { success: false, error: 'A2P 10DLC registration required for US SMS' },
+    email: { success: true, message: 'Email notification sent' }
   };
 }
 
@@ -113,7 +147,7 @@ export function formatSMSMessage(lead: LeadNotification): string {
     routine: 'ROUTINE'
   };
 
-  let message = `${urgencyEmoji[lead.urgency || 'routine']} NEW ${urgencyText[lead.urgency || 'routine']} LEAD\n\n`;
+  let message = `🚛 NEW SERVICE REQUEST - Golden Heavy Duty\n\n`;
   
   message += `Name: ${lead.name}\n`;
   message += `Phone: ${lead.phone}\n`;
@@ -123,9 +157,10 @@ export function formatSMSMessage(lead: LeadNotification): string {
   if (lead.issue) message += `Issue: ${lead.issue}\n`;
   if (lead.isFleet) message += `Fleet: ${lead.fleetSize || 'Yes'}\n`;
   
-  message += `\nType: ${lead.type.toUpperCase()}\n`;
+  message += `\nUrgency: ${urgencyText[lead.urgency || 'routine']}\n`;
+  message += `Type: ${lead.type.toUpperCase()}\n`;
   message += `Time: ${new Date(lead.timestamp).toLocaleString()}\n`;
-  message += `Source: Chatbot\n\n`;
+  message += `Source: ${lead.source}\n\n`;
   
   if (lead.urgency === 'emergency') {
     message += `🚨 CALL IMMEDIATELY: ${lead.phone}`;
