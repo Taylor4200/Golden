@@ -41,7 +41,7 @@ INSERT INTO service_categories (name, slug, description, icon, color, sort_order
   ('Electrical & Diagnostics', 'electrical-diagnostics', 'Electrical systems, computer diagnostics, and troubleshooting', 'zap', '#8B5CF6', 3),
   ('Tires & Suspension', 'tires-suspension', 'Tire service, suspension repair, and alignment', 'circle', '#10B981', 4),
   ('Preventative Maintenance', 'preventative-maintenance', 'Regular maintenance, inspections, and service schedules', 'calendar', '#3B82F6', 5),
-  ('Emergency Services', 'emergency-services', '24/7 emergency repair, towing, and roadside assistance', 'phone', '#DC2626', 6)
+  ('Emergency Services', 'emergency-services', '24/7 emergency repair and roadside assistance', 'phone', '#DC2626', 6)
 ON CONFLICT (slug) DO NOTHING;
 
 -- Insert default services
@@ -127,12 +127,12 @@ INSERT INTO services (name, slug, description, short_description, icon, price_ra
   (
     '24/7 Emergency Service',
     'emergency-service',
-    'Round-the-clock emergency repair and towing services. When your truck breaks down, we''re here to help get you back on the road quickly and safely.',
-    '24/7 emergency repair and towing',
+    'Round-the-clock emergency repair services. When your truck breaks down, we''re here to help get you back on the road quickly and safely.',
+    '24/7 emergency repair',
     'phone',
     'Call for quote',
     'Varies',
-    ARRAY['Emergency repairs', 'Roadside assistance', 'Towing service', 'Jump starts', 'Tire changes', 'Fuel delivery'],
+    ARRAY['Emergency repairs', 'Roadside assistance', 'Jump starts', 'Tire changes', 'Fuel delivery'],
     'emergency-services',
     true,
     7

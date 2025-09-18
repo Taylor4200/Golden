@@ -251,7 +251,7 @@ export default function About() {
                       </li>
                       <li className="flex items-center space-x-2">
                         <MapPin className="h-5 w-5 text-primary" />
-                        <span>Convenient location with easy access for towing services</span>
+                        <span>Convenient location with easy access for emergency repairs</span>
                       </li>
                       <li className="flex items-center space-x-2">
                         <Shield className="h-5 w-5 text-primary" />

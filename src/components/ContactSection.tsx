@@ -138,8 +138,8 @@ export default function ContactSection() {
                   Find Us
                 </h4>
                 <p className="text-gray-300 mb-6 text-lg leading-relaxed">
-                  Located conveniently off I-76 in Hudson, CO. Easy access for 
-                  trucks and emergency towing services.
+                      Located conveniently off I-76 in Hudson, CO. Easy access for 
+                      trucks and emergency repair services.
                 </p>
                 <a
                   href={settings.googleMapsUrl}

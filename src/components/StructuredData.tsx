@@ -115,7 +115,7 @@ export default function StructuredData() {
           "itemOffered": {
             "@type": "Service",
             "name": "Emergency Service",
-            "description": "24/7 emergency roadside assistance and towing for when you need help most."
+            "description": "24/7 emergency roadside assistance for when you need help most."
           }
         },
         {

@@ -139,7 +139,7 @@ export default function Contact() {
                       <span className="font-semibold text-primary">24/7 Emergency Road Service</span>
                     </div>
                     <p className="text-sm text-muted">
-                      Available for emergency repairs and towing services around the clock.
+                      Available for emergency repairs around the clock.
                     </p>
                   </div>
                 </div>
@@ -149,7 +149,7 @@ export default function Contact() {
                 <h3 className="text-2xl font-bold mb-6">Mobile Service Areas</h3>
                 <p className="text-gray-300 mb-6">
                   We provide mobile service within a 100-mile radius of Denver in all directions. 
-                  Emergency towing and roadside assistance available throughout the region.
+                  Emergency roadside assistance available throughout the region.
                 </p>
                 <div className="grid grid-cols-2 gap-2 mb-6">
                   {serviceAreas.map((area, index) => (
@@ -192,7 +192,7 @@ export default function Contact() {
                 Emergency Service Available 24/7
               </h2>
               <p className="text-xl text-red-100 mb-8 text-center">
-                Truck broke down? Need emergency repair or towing? We're here to help 
+                Truck broke down? Need emergency repair? We're here to help 
                 when you need us most.
               </p>
               <a
