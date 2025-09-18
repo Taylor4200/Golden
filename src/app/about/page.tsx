@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { Wrench, Users, Award, Clock, Shield, MapPin } from 'lucide-react';
+import FacilityCarousel from '@/components/FacilityCarousel';
 
 export default function About() {
   const values = [
@@ -71,22 +72,13 @@ export default function About() {
                   </h2>
                   <div className="space-y-5 text-muted leading-relaxed">
                     <p>
-                      Founded in <strong>2021</strong> by <strong>Brandon and Tyler</strong>, Golden Heavy Duty has built a
-                      reputation for <strong>excellence</strong> in heavy-duty truck repair with a big
-                      vision: to provide <strong>reliable, professional</strong> heavy-duty truck repair
-                      services to the growing <strong>Northern Colorado</strong> region.
+                      <strong>Golden Heavy Duty</strong> was founded in <strong>2021</strong> by <strong>Brandon and Tyler</strong> with a simple vision: deliver dependable, professional truck repair services to Northern Colorado and beyond.
                     </p>
                     <p>
-                      What began as a <strong>one-man operation</strong> has grown into a <strong>full-service
-                      facility</strong> with a team of <strong>certified technicians</strong>, <strong>state-of-the-art
-                      diagnostic equipment</strong>, and a reputation for excellence that extends
-                      across <strong>Colorado and beyond</strong>.
+                      What started as an idea quickly developed into a trusted operation, building a reputation for quality service and reliability.
                     </p>
                     <p>
-                      Today, we&apos;re proud to serve <strong>fleets of all sizes</strong>, from
-                      <strong>owner-operators</strong> to <strong>major transportation companies</strong>, with the same
-                      <strong>dedication to quality and customer service</strong> that has defined us from
-                      day one.
+                      Today, <strong>Golden Heavy Duty</strong> continues to serve drivers and fleets across the region with the same commitment to integrity and customer care that has been there since the beginning.
                     </p>
                   </div>
                 </div>
@@ -99,14 +91,16 @@ export default function About() {
                 transition={{ duration: 0.7 }}
                 className="relative flex items-center"
               >
-                <img
-                  src="/bill-griepenstroh-Q9X_p5dDq_8-unsplash.jpg"
-                  alt="Golden Heavy Duty shop facility"
-                  className="rounded-2xl shadow-2xl w-full h-full object-cover"
-                />
-                <div className="absolute bottom-4 left-4 bg-primary text-white p-4 rounded-xl shadow-lg">
-                  <div className="text-3xl font-bold font-sans">5+</div>
-                  <div className="text-sm font-medium">Years of Excellence</div>
+                <div className="w-full h-full relative">
+                  <img
+                    src="/pexels-robertkso-18468424.jpg"
+                    alt="Professional heavy-duty truck repair service"
+                    className="rounded-2xl shadow-2xl w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-4 left-4 bg-primary text-white p-4 rounded-xl shadow-lg">
+                    <div className="text-3xl font-bold font-sans">5+</div>
+                    <div className="text-sm font-medium">Years of Excellence</div>
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -210,7 +204,7 @@ export default function About() {
         <section className="py-20 bg-gray-50">
           <div className="w-full px-6 sm:px-12 lg:px-20">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* Image */}
+              {/* Image Carousel */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -218,15 +212,16 @@ export default function About() {
                 viewport={{ once: false, margin: "-100px" }}
                 className="relative"
               >
-                <img
-                  src="/bill-griepenstroh-Q9X_p5dDq_8-unsplash.jpg"
+                <FacilityCarousel
+                  images={[
+                    '/Photo1.jfif',
+                    '/photo2.jfif', 
+                    '/photo3.jfif',
+                    '/photo4.jfif'
+                  ]}
                   alt="State-of-the-art repair facility"
                   className="rounded-2xl shadow-2xl w-full object-cover"
                 />
-                <div className="absolute top-4 right-4 bg-secondary text-white p-4 rounded-xl shadow-lg">
-                  <div className="text-2xl font-bold">10,000+</div>
-                  <div className="text-sm">Sq Ft Facility</div>
-                </div>
               </motion.div>
 
               {/* Text */}
