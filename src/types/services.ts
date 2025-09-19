@@ -28,3 +28,4 @@ export interface ServiceCategory {
   active: boolean;
   createdAt: string;
 }
+

@@ -59,3 +59,4 @@ EXECUTE FUNCTION update_chatbot_leads_updated_at();
 --   "timestamp": "2024-01-01T12:00:00Z",
 --   "source": "chatbot"
 -- }
+

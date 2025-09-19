@@ -1,12 +1,9 @@
+'use client';
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
-
-export const metadata = {
-  title: 'Terms of Service | Golden Heavy Duty Truck Repair',
-  description: 'Terms of Service for Golden Heavy Duty Truck Repair. Read our terms and conditions for using our services.',
-};
 
 export default function TermsOfService() {
   const { settings } = useSiteSettings();

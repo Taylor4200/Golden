@@ -1,12 +1,9 @@
+'use client';
+
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
-
-export const metadata = {
-  title: 'Privacy Policy | Golden Heavy Duty Truck Repair',
-  description: 'Privacy Policy for Golden Heavy Duty Truck Repair. Learn how we collect, use, and protect your personal information.',
-};
 
 export default function PrivacyPolicy() {
   const { settings } = useSiteSettings();

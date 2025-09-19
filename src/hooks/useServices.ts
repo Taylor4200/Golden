@@ -73,3 +73,4 @@ export function useServiceCategories() {
 
   return { categories, isLoading, error };
 }
+

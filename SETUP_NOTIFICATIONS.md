@@ -152,3 +152,4 @@ const { data: leads } = await supabase
 ## 🎉 **You're Done!**
 
 Your chatbot now sends instant SMS and email notifications for all leads. Emergency requests get immediate attention, and you'll never miss a potential customer again!
+
