@@ -205,7 +205,7 @@ export default function About() {
               >
                 <FacilityCarousel
                   images={[
-                    '/Photo1.jfif',
+                    '/photo1.jfif',
                     '/photo2.jfif', 
                     '/photo3.jfif',
                     '/photo4.jfif'
